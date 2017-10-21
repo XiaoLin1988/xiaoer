@@ -16,7 +16,7 @@ class Shangjia extends MY_Controller {
 
     public function create() {
         $result = array();
-        if (!isset($_POST['sj_name'])) {
+        if (!isset($_POST['name'])) {
             $result['status'] = false;
             $result['data'] = lang('not_found_name');
         } elseif (!isset($_POST['sj_otime'])) {

@@ -2,11 +2,11 @@
 
 /**
  * Created by PhpStorm.
- * User: emerald
- * Date: 10/10/2017
- * Time: 1:02 AM
+ * User: macmini
+ * Date: 10/21/17
+ * Time: 11:23 PM
  */
-class Shangjia_model extends CI_Model{
+class Jingli_model extends CI_Model{
 
     public function create($data) {
         $columns = "";
@@ -18,7 +18,7 @@ class Shangjia_model extends CI_Model{
         $columns = rtrim($columns, ",");
         $values = rtrim($values, ",");
 
-        $query = "INSERT INTO tbl_shangjia(".$columns.") VALUES(".$values.")";
+        $query = "INSERT INTO tbl_jingli(".$columns.") VALUES(".$values.")";
 
         $res = $this->db->query($query);
 
@@ -29,5 +29,6 @@ class Shangjia_model extends CI_Model{
         }
 
     }
+
 
 }
