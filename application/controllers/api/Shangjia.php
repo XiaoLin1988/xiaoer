@@ -50,10 +50,6 @@ class Shangjia extends MY_Controller {
             $result['status'] = false;
             $result['data'] = lang('not_found_lng');
         } else {
-            /*
-            $result['status'] = true;
-            $result['data'] = 1;
-            */
             $data = array(
                 'sj_name' => $_POST['name'],
                 'sj_stime' => $_POST['stime'],
@@ -65,7 +61,12 @@ class Shangjia extends MY_Controller {
                 'sj_phone' => $_POST['phone'],
                 'sj_type' => $_POST['type'],
                 'sj_lat' => $_POST['lat'],
-                'sj_lng' => $_POST['lng']
+                'sj_lng' => $_POST['lng'],
+                'sj_aprd' => 0,
+                'sj_aval' => 1,
+                'sj_ctime' => time(),
+                'sj_utime' => time(),
+                'sj_df' => 0
             );
 
             $ret = $this->shangjia->create($data);
@@ -112,36 +113,6 @@ class Shangjia extends MY_Controller {
     public function nearby() {
         $result = array();
 
-        if (!isset($_POST['sj_lat'])) {
-            $result['status'] = false;
-            $result['data'] = lang('not_found_lat');
-        } elseif (!isset($_POST['sj_lng'])) {
-            $result['status'] = false;
-            $result['data'] = lang('not_found_lng');
-        } else {
-            $result['status'] = true;
-
-            $sjList = array();
-            $sj = new stdClass();
-            $sj->sj_id = 1;
-            $sj->sj_name = 'shangjia1';
-            $sj->sj_otime = 123456987;
-            $sj->sj_etime = 123456789;
-            $sj->sj_lat = 140.56656;
-            $sj->sj_lng = 70.8899;
-            $sj->sj_ctime = 129495161;
-            $sj->sj_type = 1;
-            $sj->sj_addr = 'wenan';
-            $sj->sj_province = 'liaoning';
-            $sj->sj_city = 'shenyang';
-            $sj->sj_district = 'heping';
-            $sj->sj_phone = '18715250377';
-            $sj->sj_images = array('sj_123456789.png', 'sj_12334535.png', 'sj_34232455.png');
-
-            array_push($sjList, $sj);
-            $result['data'] = $sjList;
-        }
-
         echo json_encode($result);
     }
 
@@ -178,7 +149,19 @@ class Shangjia extends MY_Controller {
         echo json_encode($result);
     }
 
-    public function detail($sj_id) {
+    public function detail() {
+        $result = array();
 
+        if (!isset($_POST['id'])) {
+            $result['status'] = false;
+            $result['data'] = 'Shangjia id not found';
+        } else {
+            $ret = $this->shangjia->detail($_POST['id']);
+
+            $result['status'] = true;
+            $result['data'] = $ret[0];
+        }
+
+        echo json_encode($result);
     }
 }
