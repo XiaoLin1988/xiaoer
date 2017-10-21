@@ -27,8 +27,25 @@ class Jingli_model extends CI_Model{
         } else {
             return $res;
         }
-
     }
 
+    public function get($shangjiaId) {
+        $res = $this->db->query("select a.jl_id, 
+                                        a.jl_name, 
+                                        a.jl_sj_id, 
+                                        b.img_path as avatar 
+                                  from tbl_jingli a, tbl_image b 
+                                  WHERE a.jl_id = b.img_fid and b.img_type = 4 and a.jl_sj_id = ".$shangjiaId)->result_array();
+        return $res;
+    }
+
+    public function delete($id) {
+
+        $query = "Update tbl_jingli SET jl_df = 1  WHERE jl_id = ".$id;
+
+        $res = $this->db->query($query);
+
+        return $res;
+    }
 
 }
