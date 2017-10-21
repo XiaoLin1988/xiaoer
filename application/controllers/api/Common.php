@@ -48,6 +48,7 @@ class Common extends MY_Controller {
                     'img_type' => $_POST['type'],
                     'img_fid' => $_POST['foreign_id'],
                     'img_ctime' => time(),
+                    'img_utime' => time(),
                     'img_df' => 0
                 );
 

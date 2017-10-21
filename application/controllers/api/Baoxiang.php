@@ -9,23 +9,78 @@
 class Baoxiang extends MY_Controller {
     public function __construct() {
         parent::__construct();
-        //$this->load->model('Shangjia_model', 'shangjia');
+        $this->load->model('Baoxiang_model', 'baoxiang');
         $this->lang->load('baoxiang');
     }
 
     public function create() {
+        $result = array();
 
+        $data = array(
+            'bx_name' => $_POST['name'],
+            'bx_sj_id' => $_POST['sj_id'],
+            'bx_type' => $_POST['type'],
+            'bx_capable' => $_POST['capable'],
+            'bx_jl_id' => $_POST['jl_id'],
+            'bx_stts' => 2,
+            'bx_ctime' => time(),
+            'bx_utime' => time(),
+            'bx_df' => 0
+        );
+        $ret = $this->baoxiang->create($data);
+        if (gettype($ret) == "boolean") {
+            $result['status'] = false;
+            $result['data'] = "Cannot register data to database";
+        } else {
+            $result['status'] = true;
+            $result['data'] = $ret;
+        }
+
+        echo json_encode($result);
     }
 
     public function update() {
+        $result = array();
 
+        $data = array();
+
+        if (isset($_POST['capable'])) {
+            $data['bx_capable'] = $_POST['capable'];
+        }
+
+        $ret = $this->baoxiang->update($data, $_POST['id']);
+
+        $result['status'] = $ret;
+        $result['data'] = 'success';
+
+        echo json_encode($result);
     }
 
     public function delete() {
+        $result = array();
 
+        $data = array();
+
+        if (isset($_POST['id'])) {
+            $data['bx_df'] = 1;
+        }
+
+        $ret = $this->baoxiang->update($data, $_POST['id']);
+
+        $result['status'] = $ret;
+        $result['data'] = 'success';
+
+        echo json_encode($result);
     }
 
-    public function search() {
+    public function getAll() {
+        $result = array();
 
+        $ret = $this->baoxiang->getAll($_POST['sj_id']);
+
+        $result['status'] = true;
+        $result['data'] = $ret;
+
+        echo json_encode($result);
     }
 }

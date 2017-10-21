@@ -6,7 +6,7 @@
  * Date: 10/10/2017
  * Time: 1:02 AM
  */
-class Shangjia_model extends CI_Model{
+class Baoxiang_model extends CI_Model{
 
     public function create($data) {
         $columns = "";
@@ -18,7 +18,7 @@ class Shangjia_model extends CI_Model{
         $columns = rtrim($columns, ",");
         $values = rtrim($values, ",");
 
-        $query = "INSERT INTO tbl_shangjia(".$columns.") VALUES(".$values.")";
+        $query = "INSERT INTO tbl_baoxiang(".$columns.") VALUES(".$values.")";
 
         $res = $this->db->query($query);
 
@@ -38,19 +38,19 @@ class Shangjia_model extends CI_Model{
 
         $sets = rtrim($sets, ",");
 
-        $res = $this->db->query("UPDATE tbl_shangjia SET ".$sets." WHERE sj_id={$id}");
+        $res = $this->db->query("UPDATE tbl_baoxiang SET ".$sets." WHERE bx_id={$id}");
 
         return $res;
     }
 
-    public function detail($id) {
+    public function getAll($sj_id) {
         $query = "
             SELECT
                 *
             FROM
-                tbl_shangjia
+                tbl_baoxiang
             WHERE
-                sj_id={$id}";
+                bx_sj_id={$sj_id}";
         $res = $this->db->query($query)->result_array();
 
         return $res;
