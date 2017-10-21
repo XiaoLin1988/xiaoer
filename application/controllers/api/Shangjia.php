@@ -10,7 +10,7 @@ class Shangjia extends MY_Controller {
 
     public function __construct() {
         parent::__construct();
-        //$this->load->model('Shangjia_model', 'shangjia');
+        $this->load->model('Shangjia_model', 'shangjia');
         $this->lang->load('shangjia');
     }
 
@@ -50,8 +50,32 @@ class Shangjia extends MY_Controller {
             $result['status'] = false;
             $result['data'] = lang('not_found_lng');
         } else {
+            /*
             $result['status'] = true;
             $result['data'] = 1;
+            */
+            $data = array(
+                'sj_name' => $_POST['sj_name'],
+                'sj_otime' => $_POST['sj_otime'],
+                'sj_etime' => $_POST['sj_etime'],
+                'sj_addr' => $_POST['sj_addr'],
+                'sj_province' => $_POST['sj_province'],
+                'sj_city' => $_POST['sj_city'],
+                'sj_district' => $_POST['sj_district'],
+                'sj_phone' => $_POST['phone'],
+                'sj_type' => $_POST['type'],
+                'sj_lat' => $_POST['sj_lat'],
+                'sj_lng' => $_POST['sj_lng']
+            );
+
+            $ret = $this->shangjia->create($data);
+            if (gettype($ret) == "boolean") {
+                $result['status'] = false;
+                $result['data'] = "Cannot register data to database";
+            } else {
+                $result['status'] = true;
+                $result['data'] = $ret;
+            }
         }
 
         echo json_encode($result);
