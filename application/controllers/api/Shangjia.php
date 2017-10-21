@@ -19,22 +19,22 @@ class Shangjia extends MY_Controller {
         if (!isset($_POST['name'])) {
             $result['status'] = false;
             $result['data'] = lang('not_found_name');
-        } elseif (!isset($_POST['sj_otime'])) {
+        } elseif (!isset($_POST['stime'])) {
             $result['status'] = false;
             $result['data'] = lang('not_found_otime');
-        } elseif (!isset($_POST['sj_etime'])) {
+        } elseif (!isset($_POST['etime'])) {
             $result['status'] = false;
             $result['data'] = lang('not_found_etime');
-        } elseif (!isset($_POST['sj_addr'])) {
+        } elseif (!isset($_POST['addr'])) {
             $result['status'] = false;
             $result['data'] = lang('not_found_addr');
-        } elseif (!isset($_POST['sj_province'])) {
+        } elseif (!isset($_POST['province'])) {
             $result['status'] = false;
             $result['data'] = lang('not_found_province');
-        } elseif (!isset($_POST['sj_city'])) {
+        } elseif (!isset($_POST['city'])) {
             $result['status'] = false;
             $result['data'] = lang('not_found_city');
-        } elseif (!isset($_POST['sj_district'])) {
+        } elseif (!isset($_POST['district'])) {
             $result['status'] = false;
             $result['data'] = lang('not_found_district');
         } elseif (!isset($_POST['phone'])) {
@@ -43,10 +43,10 @@ class Shangjia extends MY_Controller {
         } elseif (!isset($_POST['type'])) {
             $result['status'] = false;
             $result['data'] = lang('not_found_type');
-        } elseif (!isset($_POST['sj_lat'])) {
+        } elseif (!isset($_POST['lat'])) {
             $result['status'] = false;
             $result['data'] = lang('not_found_lat');
-        } elseif (!isset($_POST['sj_lng'])) {
+        } elseif (!isset($_POST['lng'])) {
             $result['status'] = false;
             $result['data'] = lang('not_found_lng');
         } else {
@@ -55,17 +55,17 @@ class Shangjia extends MY_Controller {
             $result['data'] = 1;
             */
             $data = array(
-                'sj_name' => $_POST['sj_name'],
-                'sj_otime' => $_POST['sj_otime'],
-                'sj_etime' => $_POST['sj_etime'],
-                'sj_addr' => $_POST['sj_addr'],
-                'sj_province' => $_POST['sj_province'],
-                'sj_city' => $_POST['sj_city'],
-                'sj_district' => $_POST['sj_district'],
+                'sj_name' => $_POST['name'],
+                'sj_stime' => $_POST['stime'],
+                'sj_etime' => $_POST['etime'],
+                'sj_addr' => $_POST['addr'],
+                'sj_province' => $_POST['province'],
+                'sj_city' => $_POST['city'],
+                'sj_district' => $_POST['district'],
                 'sj_phone' => $_POST['phone'],
                 'sj_type' => $_POST['type'],
-                'sj_lat' => $_POST['sj_lat'],
-                'sj_lng' => $_POST['sj_lng']
+                'sj_lat' => $_POST['lat'],
+                'sj_lng' => $_POST['lng']
             );
 
             $ret = $this->shangjia->create($data);

@@ -8,6 +8,11 @@
  */
 class Common extends MY_Controller {
 
+    public function __construct() {
+        parent::__construct();
+        $this->load->model('Common_model', 'common');
+    }
+
     public function imageUpload() {
         $result = array();
         $file = 'uploads/';
@@ -37,8 +42,23 @@ class Common extends MY_Controller {
 
             $ret = move_uploaded_file($upFile['tmp_name'], $file);
             if ($ret == TRUE) {
-                $result['status'] = true;
-                $result['data'] = $file;
+
+                $data = array(
+                    'img_path' => $file,
+                    'img_type' => $_POST['type'],
+                    'img_fid' => $_POST['foreign_id'],
+                    'img_ctime' => time(),
+                    'img_df' => 0
+                );
+
+                $ret = $this->common->imageUpload($data);
+                if ($ret == TRUE) {
+                    $result['status'] = true;
+                    $result['data'] = $file;
+                } else {
+                    $result['status'] = false;
+                    $result['data'] = 'Couldn\'t save image to database, try again';
+                }
             } else {
                 $result['status'] = false;
                 $result['data'] = 'Couldn\'t copy image, try again';
