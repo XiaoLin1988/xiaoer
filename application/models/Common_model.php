@@ -24,4 +24,17 @@ class Common_model extends CI_Model {
         return $res;
     }
 
+    public function imageUpdate($data, $path) {
+        $sets = "";
+        foreach ($data as $key=>$value) {
+            $sets .= $key.'="'.$value.'",';
+        }
+
+        $sets = rtrim($sets, ",");
+
+        $res = $this->db->query("UPDATE tbl_image SET ".$sets." WHERE img_path like '{$path}'");
+
+        return $res;
+    }
+
 }

@@ -68,4 +68,39 @@ class Common extends MY_Controller {
 
         echo json_encode($result);
     }
+
+    public function imageUpdate() {
+        $result = array();
+
+        if (!isset($_FILES['image'])) {
+            $result['status'] = false;
+            $result['data'] = 'Please select image to upload';
+        } else  {
+            $file = $_POST['path'];
+
+            if(file_exists($file)) {
+                chmod($file, 0755);
+                unlink($file);
+            }
+
+            $upFile = $_FILES['image'];
+
+            $ret = move_uploaded_file($upFile['tmp_name'], $file);
+            if ($ret == TRUE) {
+
+                $data = array(
+                    'img_utime' => time()
+                );
+
+                $this->common->imageUpdate($data, $file);
+                $result['status'] = true;
+                $result['data'] = '';
+            } else {
+                $result['status'] = false;
+                $result['data'] = 'Couldn\'t update image, try again';
+            }
+        }
+
+        echo json_encode($result);
+    }
 }

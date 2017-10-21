@@ -46,11 +46,11 @@ class Shangjia_model extends CI_Model{
     public function detail($id) {
         $query = "
             SELECT
-                *
+                a.*, b.img_path
             FROM
-                tbl_shangjia
+                tbl_shangjia a, tbl_image b
             WHERE
-                sj_id={$id}";
+                a.sj_id={$id} AND a.sj_id=b.img_fid AND b.img_type=1";
         $res = $this->db->query($query)->result_array();
 
         return $res;
