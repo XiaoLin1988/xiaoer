@@ -15,4 +15,13 @@ class MY_Controller extends CI_Controller {
         $this->data['lang'] = $this->config->item('language');
     }
 
+    public function createVerificationCode($length = 10) {
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $charactersLength = strlen($characters);
+        $randomString = '';
+        for ($i = 0; $i < $length; $i++) {
+            $randomString .= $characters[rand(0, $charactersLength - 1)];
+        }
+        return $randomString;
+    }
 }

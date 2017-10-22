@@ -42,5 +42,7 @@ class Yonghu_model extends CI_Model{
         return $res;
     }
 
-
+    public function search($key) {
+        $query = "SELECT * FROM tbl_yonghu WHERE yh_name LIKE '%{$key}%' OR tbl_yonghu.yh_phone LIKE '%{$key}%'";
+    }
 }

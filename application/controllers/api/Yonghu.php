@@ -61,5 +61,22 @@ class Yonghu extends MY_Controller
         echo json_encode($result);
     }
 
+    public function search() {
+        $result = array();
 
+        $key = '';
+        if (isset($_POST['name'])) {
+            $key = $_POST['name'];
+        }
+        if (isset($_POST['phone'])) {
+            $key = $_POST['phone'];
+        }
+
+        $ret = $this->yonghu->search($key);
+
+        $result['status'] = true;
+        $result['data'] = $ret;
+
+        echo json_encode($ret);
+    }
 }

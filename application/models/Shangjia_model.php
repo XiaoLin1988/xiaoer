@@ -84,8 +84,7 @@ class Shangjia_model extends CI_Model{
             WHERE
               bx.bx_sj_id=sj.sj_id
               AND sj.sj_name LIKE '%{$data['name']}%'
-              AND bx.bx_capable >= {$data['capable']}
-              AND ((bx.bx_id NOT IN (SELECT dz1.dz_bx_id FROM tbl_dingzuo dz1)) OR (bx.bx_id in (select dz_bx_id from  tbl_dingzuo where bx.bx_id=dz_bx_id AND (dz_stime >= {$data['atime']} OR dz_etime <= {$data['atime']}))))";
+              AND bx.bx_capable >= {$data['capable']}";
 
         if($data['atime'] != '0') {
             $hour = date('H', $data['atime']);
