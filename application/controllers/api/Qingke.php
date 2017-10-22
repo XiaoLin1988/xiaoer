@@ -18,25 +18,13 @@ class Qingke extends MY_Controller {
     public function create() {
         $result = array();
 
-        $dingzuoData = array(
-            'dz_buyer_id' => $_POST['sender_id'],
-            'dz_sj_id' => $_POST['sj_id'],
-            'dz_bx_id' => $_POST['bx_id'],
-            'dz_jl_id' => $_POST['jl_id'],
-            'dz_atime' => $_POST['atime'],
-            'dz_pcount' => $_POST['pcount'],
-            'dz_stts' => 1,
-            'dz_ctime' => time(),
-            'dz_utime' => time(),
-            'dz_df' => 0
-        );
-
-        $dz_id = $this->dingzuo->create($dingzuoData);
-
         $qingkeData = array(
             'qk_sender_id' => $_POST['sender_id'],
             'qk_receiver_id' => $_POST['receiver_id'],
-            'qk_dz_id' => $dz_id,
+            'qk_sj_id' => $_POST['sj_id'],
+            'qk_bx_id' => $_POST['bx_id'],
+            'qk_jl_id' => $_POST['jl_id'],
+            'qk_atime' => $_POST['atime'],
             'qk_stts' => 0,
             'qk_authcode' => $this->createVerificationCode(16),
             'qk_ctime' => time(),
@@ -44,8 +32,33 @@ class Qingke extends MY_Controller {
             'qk_df' => 0
         );
 
-        $qk_id = $this->qingke->create();
+        $qk_id = $this->qingke->create($qingkeData);
 
+        if(gettype($qk_id) == "integer") {
+            $time = time();
+            foreach($_POST['mjiu'] as $jiu) {
+                $mjiuData = array(
+                    'mjiu_atype' => 2,
+                    'mjiu_action_id' => $qk_id,
+                    'mjiu_type' => $jiu['type'],
+                    'mjiu_jiu_id' => $jiu['id'],
+                    'mjiu_count' => $jiu['count'],
+                    'mjiu_ctime' => $time,
+                    'mjiu_utime' => $time,
+                    'mjiu_df' => 0
+                );
+
+                $this->mjiu->create($mjiuData);
+            }
+
+            $result['status'] = true;
+            $result['data'] = $qk_id;
+        } else {
+            $result['status'] = false;
+            $result['data'] = 'db error';
+        }
+
+        echo json_encode($result);
     }
 
     public function update() {
@@ -53,7 +66,19 @@ class Qingke extends MY_Controller {
     }
 
     public function getByShangjia() {
+        $result = array();
 
+        $ret = $this->qingke->getByShangjia($_POST['sj_id']);
+        if (sizeof($ret) > 0) {
+            $qingke = $ret[0];
+
+            $data = $this->mjiu->getAll(2, $qingke['qk_id']);    //atype, action_id
+        } else {
+            $result['status'] = true;
+            $result['data'] = [];
+        }
+
+        echo json_encode($result);
     }
 
     public function getByYonghu() {
