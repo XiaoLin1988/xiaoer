@@ -57,6 +57,8 @@ class Shangjia_model extends CI_Model{
     }
 
     public function nearby($lat, $lng, $type) {
+        $time = time();
+
         $data = $this->db->query(
             "SELECT tbl_shangjia.*, round((
 				6371 * acos (
@@ -67,7 +69,7 @@ class Shangjia_model extends CI_Model{
 				* sin( radians( sj_lat ) )
 				)
             ),1) AS distance
-            FROM tbl_shangjia WHERE sj_type={$type}
+            FROM tbl_shangjia WHERE sj_type={$type} AND sj_stime<={$time} AND sj_etime>={$time}
             HAVING distance < 20
             ORDER BY distance
             LIMIT 0 , 20;")->result_array();
