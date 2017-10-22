@@ -13,11 +13,15 @@ class Maijiu extends MY_Controller
         parent::__construct();
     }
 
-    public function index() {
+    public function create() {
+        $result = array();
 
+        $data = array(
+
+        );
     }
 
-    public function getAll($id) {
+    public function getAll() {
 
     }
 }

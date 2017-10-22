@@ -113,38 +113,41 @@ class Shangjia extends MY_Controller {
     public function nearby() {
         $result = array();
 
+        $ret = $this->shangjia->nearby($_POST['lat'], $_POST['lng'], $_POST['type']);
+
+        $result['status'] = true;
+        $result['data'] = $ret;
+
         echo json_encode($result);
     }
 
     public function search() {
         $result = array();
 
-        if (!isset($_POST['sj_name'])) {
-            $result['status'] = false;
-            $result['data'] = lang('not_found_name');
+        $data = array();
+
+        if(isset($_POST['name'])) {
+            $data['name'] = $_POST['name'];
         } else {
-            $result['status'] = true;
-
-            $sjList = array();
-            $sj = new stdClass();
-            $sj->sj_id = 1;
-            $sj->sj_name = 'shangjia2';
-            $sj->sj_otime = 123456987;
-            $sj->sj_etime = 123456789;
-            $sj->sj_lat = 140.56656;
-            $sj->sj_lng = 70.8899;
-            $sj->sj_ctime = 129495161;
-            $sj->sj_type = 1;
-            $sj->sj_addr = 'wenti';
-            $sj->sj_province = 'liaoning';
-            $sj->sj_city = 'shenyang';
-            $sj->sj_district = 'heping';
-            $sj->sj_phone = '18715250378';
-            $sj->sj_images = array('sj_123456789.png', 'sj_12334535.png', 'sj_34232455.png');
-
-            array_push($sjList, $sj);
-            $result['data'] = $sjList;
+            $data['name'] = '';
         }
+
+        if(isset($_POST['atime'])) {
+            $data['atime'] = $_POST['atime'];
+        } else {
+            $data['atime'] = '0';
+        }
+
+        if(isset($_POST['capable'])) {
+            $data['capable'] = $_POST['capable'];
+        } else {
+            $data['capable'] = '0';
+        }
+
+        $ret = $this->shangjia->search($data);
+
+        $result['status'] = true;
+        $result['data'] = $ret;
 
         echo json_encode($result);
     }

@@ -83,4 +83,21 @@ class Baoxiang extends MY_Controller {
 
         echo json_encode($result);
     }
+
+    public function search() {
+        $result = array();
+
+        $data = array(
+            'sj_time' => $_POST['sj_time'],
+            'capable' => $_POST['capable'],
+            'atime' => $_POST['atime']
+        );
+
+        $ret = $this->baoxiang->search($data);
+
+        $result['status'] = true;
+        $result['data'] = $ret;
+
+        echo json_encode($result);
+    }
 }

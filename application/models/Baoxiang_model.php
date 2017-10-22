@@ -56,4 +56,22 @@ class Baoxiang_model extends CI_Model{
         return $res;
     }
 
+    public function search($data) {
+        $query = "
+            SELECT
+              bx.*
+            FROM
+              tbl_baoxiang bx
+            WHERE
+              bx.bx_sj_id={$data['sj_id']}
+              AND bx.bx_capable >= {$data['capable']}
+              AND ((bx.bx_id NOT IN (SELECT dz1.dz_bx_id FROM tbl_dingzuo dz1)) OR (bx.bx_id in (select dz_bx_id from  tbl_dingzuo where bx.bx_id=dz_bx_id AND (dz_stime >= {$data['atime']} OR dz_etime <= {$data['atime']}))))
+            GROUP BY bx.bx_id
+        ";
+
+        $ret = $this->db->query($query);
+
+        return $ret;
+    }
+
 }

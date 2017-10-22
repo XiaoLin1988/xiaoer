@@ -56,4 +56,46 @@ class Shangjia_model extends CI_Model{
         return $res;
     }
 
+    public function nearby($lat, $lng, $type) {
+        $data = $this->db->query(
+            "SELECT tbl_shangjia.*, round((
+				6371 * acos (
+				cos ( radians($lat) )
+				* cos( radians( sj_lat ) )
+				* cos( radians( sj_lng ) - radians($lng) )
+				+ sin ( radians($lat) )
+				* sin( radians( sj_lat ) )
+				)
+            ),1) AS distance
+            FROM tbl_shangjia WHERE sj_type={$type}
+            HAVING distance < 20
+            ORDER BY distance
+            LIMIT 0 , 20;")->result_array();
+
+        return $data;
+    }
+
+    public function search($data) {
+        $query = "
+            SELECT
+              sj.*
+            FROM
+              tbl_shangjia sj, tbl_baoxiang bx
+            WHERE
+              bx.bx_sj_id=sj.sj_id
+              AND sj.sj_name LIKE '%{$data['name']}%'
+              AND bx.bx_capable >= {$data['capable']}
+              AND ((bx.bx_id NOT IN (SELECT dz1.dz_bx_id FROM tbl_dingzuo dz1)) OR (bx.bx_id in (select dz_bx_id from  tbl_dingzuo where bx.bx_id=dz_bx_id AND (dz_stime >= {$data['atime']} OR dz_etime <= {$data['atime']}))))";
+
+        if($data['atime'] != '0') {
+            $hour = date('H', $data['atime']);
+            $query .= " AND {$hour} >= sj.sj_stime AND {$hour} <= sj.sj_etime";
+        }
+
+        $query .= " GROUP BY sj.sj_id";
+
+        $ret = $this->db->query($query)->result_array();
+
+        return $ret;
+    }
 }
