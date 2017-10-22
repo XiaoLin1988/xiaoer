@@ -85,13 +85,62 @@ class Shangjia extends MY_Controller {
     public function update() {
         $result = array();
 
-        if (!isset($_POST['sj_id'])) {
-            $result['status'] = false;
-            $result['data'] = lang('not_found_shangjia');
-        } else {
-            $result['status'] = true;
-            $result['data'] = lang('success_update');
+        $data = array();
+
+        if (isset($_POST['name'])) {
+            $data['sj_name'] = $_POST['name'];
         }
+
+        if (isset($_POST['stime'])) {
+            $data['sj_stime'] = $_POST['stime'];
+        }
+
+        if (isset($_POST['etime'])) {
+            $data['sj_etime'] = $_POST['etime'];
+        }
+
+        if (isset($_POST['addr'])) {
+            $data['sj_addr'] = $_POST['addr'];
+        }
+
+        if (isset($_POST['province'])) {
+            $data['sj_province'] = $_POST['province'];
+        }
+
+        if (isset($_POST['city'])) {
+            $data['sj_city'] = $_POST['city'];
+        }
+
+        if (isset($_POST['district'])) {
+            $data['sj_district'] = $_POST['district'];
+        }
+
+        if (isset($_POST['phone'])) {
+            $data['sj_phone'] = $_POST['phone'];
+        }
+
+        if (isset($_POST['lat'])) {
+            $data['sj_lng'] = $_POST['lat'];
+        }
+
+        if (isset($_POST['lng'])) {
+            $data['sj_lng'] = $_POST['lng'];
+        }
+
+        if (isset($_POST['aprd'])) {
+            $data['sj_aprd'] = $_POST['aprd'];
+        }
+
+        if (isset($_POST['aval'])) {
+            $data['sj_aval'] = $_POST['aval'];
+        }
+
+        $data['sj_utime'] = time();
+
+        $ret = $this->shangjia->update($data, $_POST['id']);
+
+        $result['status'] = $ret;
+        $result['data'] = '';
 
         echo json_encode($result);
     }
@@ -99,13 +148,14 @@ class Shangjia extends MY_Controller {
     public function delete() {
         $result = array();
 
-        if (!isset($_POST['sj_id'])) {
-            $result['status'] = false;
-            $result['data'] = lang('not_found_shangjia');
-        } else {
-            $result['status'] = true;
-            $result['data'] = lang('success_delete');
-        }
+        $data = array(
+            'sj_df' => 1
+        );
+
+        $ret = $this->shangjia->update($data, $_POST['id']);
+
+        $result['status'] = $ret;
+        $result['data'] = '';
 
         echo json_encode($result);
     }

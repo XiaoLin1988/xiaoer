@@ -29,4 +29,11 @@ class Mjiu_model extends CI_Model {
         }
     }
 
+    public function getAll($atype, $action_id) {
+        $query = "SELECT * FROM tbl_mjiu WHERE mjiu_atype={$atype} AND mjiu_action_id={$action_id}";
+
+        $ret = $this->db->query($query)->result_array();
+
+        return $ret;
+    }
 }

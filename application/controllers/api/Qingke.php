@@ -73,6 +73,10 @@ class Qingke extends MY_Controller {
             $qingke = $ret[0];
 
             $data = $this->mjiu->getAll(2, $qingke['qk_id']);    //atype, action_id
+            $qingke['mjiu'] = $data;
+
+            $result['status'] = true;
+            $result['data'] = $qingke;
         } else {
             $result['status'] = true;
             $result['data'] = [];
