@@ -99,4 +99,21 @@ class Shangjia_model extends CI_Model{
 
         return $ret;
     }
+
+    public function searchJiuhang($name) {
+        $time = time();
+
+        $query = "
+            SELECT
+              sj.*
+            FROM
+              tbl_shangjia
+            WHERE
+              sj_name LIKE '%{$name}%' AND sj_type=0 AND sj_stime<={$time} AND sj_etime>={$time} ";
+
+
+        $ret = $this->db->query($query)->result_array();
+
+        return $ret;
+    }
 }

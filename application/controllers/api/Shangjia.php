@@ -202,6 +202,15 @@ class Shangjia extends MY_Controller {
         echo json_encode($result);
     }
 
+    public function searchJiuhang() {
+        $ret = $this->shangjia->searchJiuhang($_POST['name']);
+
+        $result['status'] = true;
+        $result['data'] = $ret;
+
+        echo json_encode($result);
+    }
+
     public function detail() {
         $result = array();
 

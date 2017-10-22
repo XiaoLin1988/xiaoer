@@ -22,7 +22,7 @@ class Yonghu extends MY_Controller
             'yh_phone' => $_POST['phone'],
             'yh_pwd' => $_POST['password'],
             'yh_balance' => 0,
-            'yh_sj_id' => $_POST['shangjiaId'],
+            'yh_sj_id' => 0,
             'yh_rlat' => 0.0,
             'yh_rlng' => 0.0,
             'yh_raddr' => "",
