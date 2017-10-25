@@ -54,7 +54,7 @@ class Shangjia extends MY_Controller {
                 'sj_name' => $_POST['name'],
                 'sj_stime' => $_POST['stime'],
                 'sj_etime' => $_POST['etime'],
-                //'sj_addr' => $_POST['addr'],
+                'sj_addr' => $_POST['addr'],
                 'sj_province' => $_POST['province'],
                 'sj_city' => $_POST['city'],
                 'sj_district' => $_POST['district'],
