@@ -54,7 +54,7 @@ class Shangjia extends MY_Controller {
                 'sj_name' => $_POST['name'],
                 'sj_stime' => $_POST['stime'],
                 'sj_etime' => $_POST['etime'],
-                'sj_addr' => $_POST['addr'],
+                //'sj_addr' => $_POST['addr'],
                 'sj_province' => $_POST['province'],
                 'sj_city' => $_POST['city'],
                 'sj_district' => $_POST['district'],
@@ -99,9 +99,11 @@ class Shangjia extends MY_Controller {
             $data['sj_etime'] = $_POST['etime'];
         }
 
+        /*
         if (isset($_POST['addr'])) {
             $data['sj_addr'] = $_POST['addr'];
         }
+        */
 
         if (isset($_POST['province'])) {
             $data['sj_province'] = $_POST['province'];
@@ -220,8 +222,13 @@ class Shangjia extends MY_Controller {
         } else {
             $ret = $this->shangjia->detail($_POST['id']);
 
-            $result['status'] = true;
-            $result['data'] = $ret[0];
+            if (sizeof($ret) > 0) {
+                $result['status'] = true;
+                $result['data'] = $ret[0];
+            } else {
+                $result['status'] = true;
+                $result['data'] = new stdClass();
+            }
         }
 
         echo json_encode($result);

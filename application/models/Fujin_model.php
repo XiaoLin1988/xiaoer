@@ -2,12 +2,11 @@
 
 /**
  * Created by PhpStorm.
- * User: macmini
- * Date: 10/22/17
- * Time: 3:23 PM
+ * User: emerald
+ * Date: 10/23/2017
+ * Time: 1:20 AM
  */
-class Yonghu_model extends CI_Model{
-
+class Fujin_model extends CI_Model {
     public function create($data) {
         $columns = "";
         $values = "";
@@ -18,7 +17,7 @@ class Yonghu_model extends CI_Model{
         $columns = rtrim($columns, ",");
         $values = rtrim($values, ",");
 
-        $query = "INSERT INTO tbl_yonghu(".$columns.") VALUES(".$values.")";
+        $query = "INSERT INTO tbl_fujin(".$columns.") VALUES(".$values.")";
 
         $res = $this->db->query($query);
 
@@ -37,21 +36,21 @@ class Yonghu_model extends CI_Model{
 
         $sets = rtrim($sets, ",");
 
-        $res = $this->db->query("UPDATE tbl_yonghu SET ".$sets." WHERE yh_id={$id}");
+        $res = $this->db->query("UPDATE tbl_fujin SET ".$sets." WHERE fj_id={$id}");
 
         return $res;
     }
 
-    public function search($key) {
-        $query = "SELECT * FROM tbl_yonghu WHERE yh_name LIKE '%{$key}%' OR tbl_yonghu.yh_phone LIKE '%{$key}%'";
+    public function getByShangjia($sj_id) {
+        $query = "SELECT * FROM tbl_fujin WHERE qk_sj_id={$sj_id}";
 
         $ret = $this->db->query($query)->result_array();
 
         return $ret;
     }
 
-    public function getById($id) {
-        $query = "SELECT * FROM tbl_yonghu WHERE yh_id={$id}";
+    public function getByYonghu($yh_id, $stts) {
+        $query = "SELECT * FROM tbl_fujin WHERE (fj_sender_id={$yh_id} OR fj_receiver_id={$yh_id}) AND fj_stts={$stts}";
 
         $ret = $this->db->query($query)->result_array();
 

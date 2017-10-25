@@ -26,7 +26,7 @@ class Common extends MY_Controller {
         } else {
             if ($_POST['type'] == 1) {
                 $file .= 'shangjia/';
-            } else if ($_POST['type'] == 2) {
+            } else if ($_POST['type'] == 2 or $_POST['type'] == 5) {
                 $file .= 'jiu/';
             } else if ($_POST['type'] == 3 or $_POST['type'] == 4) {
                 $file .= 'avatar/';

@@ -13,6 +13,7 @@ class Qingke extends MY_Controller {
         $this->load->model('Qingke_model', 'qingke');
         $this->load->model('Dingzuo_model', 'dingzuo');
         $this->load->model('Mjiu_model', 'mjiu');
+        $this->load->model('Yonghu_model', 'yonghu');
     }
 
     public function create() {
@@ -40,9 +41,9 @@ class Qingke extends MY_Controller {
                 $mjiuData = array(
                     'mjiu_atype' => 2,
                     'mjiu_action_id' => $qk_id,
-                    'mjiu_type' => $jiu['type'],
-                    'mjiu_jiu_id' => $jiu['id'],
-                    'mjiu_count' => $jiu['count'],
+                    'mjiu_type' => $jiu['jiu_type'],
+                    'mjiu_jiu_id' => $jiu['jiu_id'],
+                    'mjiu_count' => $jiu['jiu_count'],
                     'mjiu_ctime' => $time,
                     'mjiu_utime' => $time,
                     'mjiu_df' => 0
@@ -62,7 +63,23 @@ class Qingke extends MY_Controller {
     }
 
     public function update() {
+        $result = array();
 
+        $data = array(
+            'qk_utime' => time()
+        );
+        if (isset($_POST['accept'])) {
+            $data['qk_accept'] = $_POST['accept'];
+        }
+        if (isset($_POST['stts'])) {
+            $data['qk_stts'] = $_POST['stts'];
+        }
+        $this->qingke->update($data, $_POST['id']);
+
+        $result['status'] = true;
+        $result['data'] = '';
+
+        echo json_encode($result);
     }
 
     public function getByShangjia() {
@@ -70,13 +87,23 @@ class Qingke extends MY_Controller {
 
         $ret = $this->qingke->getByShangjia($_POST['sj_id']);
         if (sizeof($ret) > 0) {
-            $qingke = $ret[0];
-
-            $data = $this->mjiu->getAll(2, $qingke['qk_id']);    //atype, action_id
-            $qingke['mjiu'] = $data;
+            foreach ($ret as $qk) {
+                $sender = $this->yonghu->getById($qk['qk_sender_id']);
+                if(sizeof($sender) > 0)
+                    $qk['sender'] = $sender[0];
+                else
+                    $qk['sender'] = new stdClass();
+                $receiver = $this->yonghu->getById($qk['qk_receiver_id']);
+                if(sizeof($receiver) > 0)
+                    $qk['receiver'] = $receiver[0];
+                else
+                    $qk['sender'] = new stdClass();
+                $data = $this->mjiu->getAll(2, $qk['qk_id']);    //atype, action_id
+                $qk['mjiu'] = $data;
+            }
 
             $result['status'] = true;
-            $result['data'] = $qingke;
+            $result['data'] = $qk;
         } else {
             $result['status'] = true;
             $result['data'] = [];
@@ -86,6 +113,33 @@ class Qingke extends MY_Controller {
     }
 
     public function getByYonghu() {
+        $result = array();
 
+        $ret = $this->qingke->getByYonghu($_POST['yh_id'], $_POST['stts']);
+
+        if (sizeof($ret) > 0) {
+            foreach ($ret as $qk) {
+                $sender = $this->yonghu->getById($qk['qk_sender_id']);
+                if(sizeof($sender) > 0)
+                    $qk['sender'] = $sender[0];
+                else
+                    $qk['sender'] = new stdClass();
+                $receiver = $this->yonghu->getById($qk['qk_receiver_id']);
+                if(sizeof($receiver) > 0)
+                    $qk['receiver'] = $receiver[0];
+                else
+                    $qk['sender'] = new stdClass();
+                $data = $this->mjiu->getAll(2, $qk['qk_id']);    //atype, action_id
+                $qk['mjiu'] = $data;
+            }
+
+            $result['status'] = true;
+            $result['data'] = $qk;
+        } else {
+            $result['status'] = true;
+            $result['data'] = [];
+        }
+
+        echo json_encode($result);
     }
 }

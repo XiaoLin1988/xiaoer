@@ -46,11 +46,11 @@ class Shangjia_model extends CI_Model{
     public function detail($id) {
         $query = "
             SELECT
-                a.*, b.img_path
+                a.*, (SELECT b.img_path FROM tbl_image b WHERE a.sj_id=b.img_fid AND b.img_type=1) as avatar
             FROM
-                tbl_shangjia a, tbl_image b
+                tbl_shangjia a
             WHERE
-                a.sj_id={$id} AND a.sj_id=b.img_fid AND b.img_type=1";
+                a.sj_id={$id} ";
         $res = $this->db->query($query)->result_array();
 
         return $res;
@@ -60,7 +60,7 @@ class Shangjia_model extends CI_Model{
         $time = time();
 
         $data = $this->db->query(
-            "SELECT tbl_shangjia.*, round((
+            "SELECT sj.*, round((
 				6371 * acos (
 				cos ( radians($lat) )
 				* cos( radians( sj_lat ) )
@@ -68,8 +68,8 @@ class Shangjia_model extends CI_Model{
 				+ sin ( radians($lat) )
 				* sin( radians( sj_lat ) )
 				)
-            ),1) AS distance
-            FROM tbl_shangjia WHERE sj_type={$type} AND sj_stime<={$time} AND sj_etime>={$time}
+            ),1) AS distance, (SELECT img_path FROM tbl_image tp WHERE tp.img_type=1 AND tp.img_fid=sj.sj_id) as avatar
+            FROM tbl_shangjia sj WHERE sj_type={$type}
             HAVING distance < 20
             ORDER BY distance
             LIMIT 0 , 20;")->result_array();
