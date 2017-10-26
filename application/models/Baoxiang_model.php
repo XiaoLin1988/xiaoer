@@ -50,7 +50,8 @@ class Baoxiang_model extends CI_Model{
             FROM
                 tbl_baoxiang
             WHERE
-                bx_sj_id={$sj_id}";
+                bx_sj_id={$sj_id}
+            ORDER BY bx_type ASC, bx_capable DESC ";
         $res = $this->db->query($query)->result_array();
 
         return $res;
