@@ -18,10 +18,10 @@ class Baoxiang extends MY_Controller {
 
         $data = array(
             'bx_name' => $_POST['name'],
-            'bx_sj_id' => $_POST['sj_id'],
+            'bx_sj_id' => $_POST['shangjiaId'],
             'bx_type' => $_POST['type'],
             'bx_capable' => $_POST['capable'],
-            'bx_jl_id' => $_POST['jl_id'],
+            'bx_jl_id' => $_POST['jingliId'],
             'bx_stts' => 2,
             'bx_ctime' => time(),
             'bx_utime' => time(),
@@ -76,7 +76,7 @@ class Baoxiang extends MY_Controller {
     public function getAll() {
         $result = array();
 
-        $ret = $this->baoxiang->getAll($_POST['sj_id']);
+        $ret = $this->baoxiang->getAll($_POST['shangjiaId']);
 
         $result['status'] = true;
         $result['data'] = $ret;
