@@ -11,6 +11,7 @@ class Shangjia extends MY_Controller {
     public function __construct() {
         parent::__construct();
         $this->load->model('Shangjia_model', 'shangjia');
+        $this->load->model('Yonghu_mode', 'yonghu');
         $this->lang->load('shangjia');
     }
 
@@ -74,8 +75,16 @@ class Shangjia extends MY_Controller {
                 $result['status'] = false;
                 $result['data'] = "Cannot register data to database";
             } else {
-                $result['status'] = true;
-                $result['data'] = $ret;
+                $yh_id = $_POST['yonghuId'];
+                $ret = $this->yonghu->update(array('yh_sj_id' => $ret), $yh_id);
+
+                if ($ret) {
+                    $result['status'] = true;
+                    $result['data'] = $ret;
+                } else {
+                    $result['status'] = false;
+                    $result['data'] = 'no yonghu';
+                }
             }
         }
 
