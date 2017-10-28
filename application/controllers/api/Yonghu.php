@@ -19,8 +19,9 @@ class Yonghu extends MY_Controller
         $data = array(
             'yh_name' => $_POST['name'],
             'yh_openId' => $_POST['openId'],
-            'yh_phone' => $_POST['phone'],
-            'yh_pwd' => $_POST['password'],
+            'yh_phone' => "",
+            'yh_pwd' => "",
+            'yh_headimgurl' => $_POST['headimgurl'],
             'yh_balance' => 0,
             'yh_sj_id' => 0,
             'yh_rlat' => 0.0,
