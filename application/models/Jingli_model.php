@@ -35,7 +35,7 @@ class Jingli_model extends CI_Model{
                                         a.jl_sj_id, 
                                         b.img_path as avatar 
                                   from tbl_jingli a, tbl_image b 
-                                  WHERE a.jl_id = b.img_fid and b.img_type = 4 and a.jl_sj_id = ".$shangjiaId)->result_array();
+                                  WHERE a.jl_df=0 and a.jl_id = b.img_fid and b.img_type = 4 and a.jl_sj_id = ".$shangjiaId)->result_array();
         return $res;
     }
 
