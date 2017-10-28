@@ -33,13 +33,28 @@ class Yonghu extends MY_Controller
 
         );
 
-        $ret = $this->yonghu->create($data);
-        if (gettype($ret) == "boolean") {
-            $result['status'] = false;
-            $result['data'] = "db error";
-        } else {
-            $result['status'] = true;
-            $result['data'] = $ret;
+        // check user existing
+        $ret = $this->yonghu->getByOpenId($_POST['openId']);
+        if (sizeof($ret) == 0) { // new
+            $ret = $this->yonghu->create($data);
+            if (gettype($ret) == "boolean") {
+                $result['status'] = false;
+                $result['data'] = "db error";
+            } else {
+                $result['status'] = true;
+                $result['data'] = $ret;
+            }
+        }
+        else { // not new, update name, headimgurl
+
+            $data = array(
+                'yh_name' => $_POST['name'],
+                'yh_headimgurl' => $_POST['headimgurl']
+            );
+
+            $ret = $this->yonghu->update($data, $ret[0]['yh_id']);
+            $result['status'] = $ret;
+            $result['data'] = 'success';
         }
 
         echo json_encode($result);
