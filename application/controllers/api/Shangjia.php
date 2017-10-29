@@ -11,8 +11,10 @@ class Shangjia extends MY_Controller {
     public function __construct() {
         parent::__construct();
         $this->load->model('Shangjia_model', 'shangjia');
-        $this->load->model('Yonghu_mode', 'yonghu');
+        $this->load->model('Yonghu_model', 'yonghu');
         $this->lang->load('shangjia');
+
+        $this->load->library('Getui', 'getui');
     }
 
     public function create() {
@@ -241,5 +243,9 @@ class Shangjia extends MY_Controller {
         }
 
         echo json_encode($result);
+    }
+
+    public function send() {
+        $template = $this->getui->pushMessageToApp();
     }
 }
