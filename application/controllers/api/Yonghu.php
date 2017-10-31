@@ -30,17 +30,17 @@ class Yonghu extends MY_Controller
             'yh_ctime' => time(),
             'yh_utime' => time(),
             'yh_df' => 0
-
         );
 
         // check user existing
         $ret = $this->yonghu->getByOpenId($_POST['openId']);
         if (sizeof($ret) == 0) { // new
-            $ret = $this->yonghu->create($data);
-            if (gettype($ret) == "boolean") {
+            $ret1 = $this->yonghu->create($data);
+            if (gettype($ret1) == "boolean") {
                 $result['status'] = false;
                 $result['data'] = "db error";
             } else {
+                $ret = $this->yonghu->getByOpenId($_POST['openId']);
                 $result['status'] = true;
                 $result['data'] = $ret;
             }
@@ -52,9 +52,10 @@ class Yonghu extends MY_Controller
                 'yh_headimgurl' => $_POST['headimgurl']
             );
 
-            $ret = $this->yonghu->update($data, $ret[0]['yh_id']);
-            $result['status'] = $ret;
-            $result['data'] = 'success';
+            $ret1 = $this->yonghu->update($data, $ret[0]['yh_id']);
+            $ret = $this->yonghu->getByOpenId($_POST['openId']);
+            $result['status'] = $ret1;
+            $result['data'] = $ret;
         }
 
         echo json_encode($result);
