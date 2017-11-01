@@ -80,7 +80,7 @@ class Shangjia_model extends CI_Model{
     public function search($data) {
         $query = "
             SELECT
-              sj.*
+              sj.*, (SELECT img_path FROM tbl_image tp WHERE tp.img_type=1 AND tp.img_fid=sj.sj_id) as avatar
             FROM
               tbl_shangjia sj, tbl_baoxiang bx
             WHERE

@@ -27,7 +27,7 @@ class Qingke extends MY_Controller {
             'qk_jl_id' => $_POST['jl_id'],
             'qk_atime' => $_POST['atime'],
             'qk_stts' => 0,
-            'qk_authcode' => $this->createVerificationCode(16),
+            'qk_authcode' => $this->createVerificationCode(11),
             'qk_ctime' => time(),
             'qk_utime' => time(),
             'qk_df' => 0
@@ -37,13 +37,14 @@ class Qingke extends MY_Controller {
 
         if(gettype($qk_id) == "integer") {
             $time = time();
-            foreach($_POST['mjiu'] as $jiu) {
+            $mjiu = json_decode($_POST['mjiu']);
+            foreach($mjiu as $jiu) {
                 $mjiuData = array(
                     'mjiu_atype' => 2,
                     'mjiu_action_id' => $qk_id,
-                    'mjiu_type' => $jiu['jiu_type'],
-                    'mjiu_jiu_id' => $jiu['jiu_id'],
-                    'mjiu_count' => $jiu['jiu_count'],
+                    'mjiu_type' => $jiu->jiu_type,
+                    'mjiu_jiu_id' => $jiu->jiu_id,
+                    'mjiu_count' => $jiu->jiu_count,
                     'mjiu_ctime' => $time,
                     'mjiu_utime' => $time,
                     'mjiu_df' => 0

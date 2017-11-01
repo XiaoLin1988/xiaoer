@@ -37,7 +37,8 @@ class Fujin extends MY_Controller {
 
         if(gettype($fj_id) == "integer") {
             $time = time();
-            foreach($_POST['mjiu'] as $jiu) {
+            $mjiu = json_decode($_POST['mjiu']);
+            foreach($mjiu as $jiu) {
                 $mjiuData = array(
                     'mjiu_atype' => 3,
                     'mjiu_action_id' => $fj_id,

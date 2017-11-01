@@ -55,7 +55,7 @@ class Yonghu extends MY_Controller
             $ret1 = $this->yonghu->update($data, $ret[0]['yh_id']);
             $ret = $this->yonghu->getByOpenId($_POST['openId']);
             $result['status'] = $ret1;
-            $result['data'] = $ret;
+            $result['data'] = $ret[0];
         }
 
         echo json_encode($result);
