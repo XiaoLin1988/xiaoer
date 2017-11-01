@@ -32,9 +32,9 @@ class Jiu_Model extends CI_Model{
 
     public function get($shangjiaId) {
         $res = $this->db->query("select a.*,
-                                        b.img_path as avatar
-                                        from tbl_jiu a, tbl_image b
-                                        WHERE a.jiu_id = b.img_fid and b.img_type = 2 and a.jiu_sj_id = ".$shangjiaId)->result_array();
+                                      (SELECT b.img_path FROM tbl_image b WHERE a.jiu_id = b.img_fid and b.img_type = 2 ) as avatar
+                                  from tbl_jiu a
+                                  WHERE a.jiu_df=0 and  a.jiu_sj_id = ".$shangjiaId)->result_array();
         return $res;
     }
 
