@@ -78,9 +78,9 @@ class Shangjia extends MY_Controller {
                 $result['data'] = "Cannot register data to database";
             } else {
                 $yh_id = $_POST['yonghuId'];
-                $ret = $this->yonghu->update(array('yh_sj_id' => $ret), $yh_id);
+                $ret1 = $this->yonghu->update(array('yh_sj_id' => $ret), $yh_id);
 
-                if ($ret) {
+                if ($ret1) {
                     $result['status'] = true;
                     $result['data'] = $ret;
                 } else {
