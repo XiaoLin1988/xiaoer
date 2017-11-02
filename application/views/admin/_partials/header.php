@@ -42,11 +42,11 @@
                     <img src="<?php echo base_url('assets/img/find_user.png'); ?>" class="user-image img-responsive"/>
                 </li>
                 <li>
-                    <a class="active-menu"  href="dashboard"><i class="fa fa-dashboard fa-3x"></i> Dashboard</a>
+                    <a class="active-menu"  href="<?php echo site_url('admin/dashboard'); ?>"><i class="fa fa-dashboard fa-3x"></i> Dashboard</a>
                 </li>
 
                 <li>
-                    <a  href="renzheng"><i class="fa fa-desktop fa-3x"></i>商家审核</a>
+                    <a  href="<?php echo site_url('admin/renzheng'); ?>"><i class="fa fa-desktop fa-3x"></i>商家审核</a>
                 </li>
 
                 <li>
