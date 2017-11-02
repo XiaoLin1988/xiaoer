@@ -72,12 +72,32 @@ class Common extends MY_Controller {
     public function imageUpdate() {
         $result = array();
 
+        $file = 'uploads/';
+
         if (!isset($_FILES['image'])) {
             $result['status'] = false;
             $result['data'] = 'Please select image to upload';
-        } else  {
-            $file = $_POST['path'];
+        } else if (!isset($_POST['type']) or !isset($_POST['foreign_id'])) {
+            $result['status'] = false;
+            $result['data'] = 'Please select your image type';
+        } else {
 
+            // get fid, type from request
+            $fid = $_POST['foreign_id'];
+            $type = $_POST['type'];
+
+            // delete already existing images
+            $ret = $this->common->imageDelete($fid, $type);
+
+            if ($_POST['type'] == 1) {
+                $file .= 'shangjia/';
+            } else if ($_POST['type'] == 2 or $_POST['type'] == 5) {
+                $file .= 'jiu/';
+            } else if ($_POST['type'] == 3 or $_POST['type'] == 4) {
+                $file .= 'avatar/';
+            }
+
+            $file .= time().'.png';
             if(file_exists($file)) {
                 chmod($file, 0755);
                 unlink($file);
@@ -89,15 +109,25 @@ class Common extends MY_Controller {
             if ($ret == TRUE) {
 
                 $data = array(
-                    'img_utime' => time()
+                    'img_path' => $file,
+                    'img_type' => $_POST['type'],
+                    'img_fid' => $_POST['foreign_id'],
+                    'img_ctime' => time(),
+                    'img_utime' => time(),
+                    'img_df' => 0
                 );
 
-                $this->common->imageUpdate($data, $file);
-                $result['status'] = true;
-                $result['data'] = '';
+                $ret = $this->common->imageUpload($data);
+                if ($ret == TRUE) {
+                    $result['status'] = true;
+                    $result['data'] = $file;
+                } else {
+                    $result['status'] = false;
+                    $result['data'] = 'Couldn\'t save image to database, try again';
+                }
             } else {
                 $result['status'] = false;
-                $result['data'] = 'Couldn\'t update image, try again';
+                $result['data'] = 'Couldn\'t copy image, try again';
             }
         }
 

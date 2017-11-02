@@ -46,11 +46,11 @@ class Shangjia_model extends CI_Model{
     public function detail($id) {
         $query = "
             SELECT
-                a.*, (SELECT b.img_path FROM tbl_image b WHERE a.sj_id=b.img_fid AND b.img_type=1) as avatar
+                a.*, (SELECT b.img_path FROM tbl_image b WHERE a.sj_id=b.img_fid AND b.img_type = 1 and b.img_df = 0) as avatar
             FROM
                 tbl_shangjia a
             WHERE
-                a.sj_id={$id} ";
+                a.sj_df = 0 AND a.sj_id={$id} ";
         $res = $this->db->query($query)->result_array();
 
         return $res;
@@ -69,7 +69,7 @@ class Shangjia_model extends CI_Model{
 				* sin( radians( sj_lat ) )
 				)
             ),1) AS distance, (SELECT img_path FROM tbl_image tp WHERE tp.img_type=1 AND tp.img_fid=sj.sj_id) as avatar
-            FROM tbl_shangjia sj WHERE sj_type={$type}
+            FROM tbl_shangjia sj WHERE sj_df = 0 AND sj_type={$type}
             HAVING distance < 20
             ORDER BY distance
             LIMIT 0 , 20;")->result_array();
@@ -84,7 +84,7 @@ class Shangjia_model extends CI_Model{
             FROM
               tbl_shangjia sj, tbl_baoxiang bx
             WHERE
-              bx.bx_sj_id=sj.sj_id
+              sj.sj_df = 0 AND bx.bx_sj_id=sj.sj_id
               AND sj.sj_name LIKE '%{$data['name']}%'
               AND bx.bx_capable >= {$data['capable']}";
 
@@ -109,7 +109,7 @@ class Shangjia_model extends CI_Model{
             FROM
               tbl_shangjia
             WHERE
-              sj_name LIKE '%{$name}%' AND sj_type=0 AND sj_stime<={$time} AND sj_etime>={$time} ";
+              sj_df = 0 AND sj_name LIKE '%{$name}%' AND sj_type=0 AND sj_stime<={$time} AND sj_etime>={$time} ";
 
 
         $ret = $this->db->query($query)->result_array();

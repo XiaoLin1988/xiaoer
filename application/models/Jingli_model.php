@@ -33,7 +33,7 @@ class Jingli_model extends CI_Model{
         $res = $this->db->query("select a.jl_id,
                                           a.jl_name,
                                           a.jl_sj_id,
-                                          (SELECT b.img_path FROM tbl_image b WHERE a.jl_id = b.img_fid and b.img_type = 4 ) as avatar
+                                          (SELECT b.img_path FROM tbl_image b WHERE a.jl_id = b.img_fid and b.img_type = 4 and b.img_df = 0  ) as avatar
                                         from tbl_jingli a
                                         WHERE a.jl_df=0 and a.jl_sj_id = ".$shangjiaId)->result_array();
         return $res;

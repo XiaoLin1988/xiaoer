@@ -37,4 +37,9 @@ class Common_model extends CI_Model {
         return $res;
     }
 
+    public function imageDelete($fid, $type) {
+        $res = $this->db->query("UPDATE tbl_image SET img_df = 1 WHERE img_fid = {$fid} AND img_type = {$type}");
+        return $res;
+    }
+
 }
