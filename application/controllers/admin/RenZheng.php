@@ -12,6 +12,7 @@ class RenZheng extends Admin_Controller
     {
         parent::__construct();
         $this->load->model('Shangjia_model', 'shangjia');
+        $this->load->library('Getui', 'getui');
     }
 
     public function index() {
@@ -42,7 +43,7 @@ class RenZheng extends Admin_Controller
         if (isset($_POST['sj_aprd']) and isset($_POST['shangjiaId'])) {
             $data = array('sj_aprd' => $_POST['sj_aprd']);
             $this->shangjia->update($data, $_POST['shangjiaId']);
-
+            $this->getui->pushMessageToApp();
             $result['status'] = true;
             $result['data'] = 'success';
         } else {
