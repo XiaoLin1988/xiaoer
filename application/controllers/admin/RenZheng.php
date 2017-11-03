@@ -22,6 +22,9 @@ class RenZheng extends Admin_Controller
         $this->add_script('assets/js/bootstrap/bootstrap-table-export-m.js', 'head');
         $this->add_script('assets/js/bootstrap/bootstrap-table-export.js', 'head');
 
+        $data = $this->shangjia->getRenzhengList();
+        $this->mViewData['data'] = $data;
+
         $this->loadView('renzheng');
     }
 
