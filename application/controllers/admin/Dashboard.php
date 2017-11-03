@@ -13,6 +13,7 @@ class Dashboard extends Admin_Controller {
     }
 
     public function index() {
+        $this->mViewData['menu_selected'] = 'dashboard';
         $this->loadView('dashboard');
     }
 }
