@@ -119,7 +119,7 @@ class Shangjia_model extends CI_Model{
 
     public function getRenzhengList() {
 
-        $query = "SELECT sj.* , yh.yh_id, yh.yh_name, yh.yh_headimgurl, (select img.img_path from tbl_image img WHERE img.img_type = 6 AND img.img_df = 0 AND img.img_fid = sj.sj_id) as renzhengImages
+        $query = "SELECT sj.* , yh.yh_id, yh.yh_name, yh.yh_headimgurl, (select img.img_path from tbl_image img WHERE img.img_type = 6 AND img.img_df = 0 AND img.img_fid = sj.sj_id) as renzhengImages, (SELECT img.img_path FROM tbl_image img WHERE sj.sj_id=img.img_fid AND img.img_type = 1 and img.img_df = 0) as avatar
                     FROM tbl_shangjia sj RIGHT JOIN tbl_yonghu yh on sj.sj_id = yh.yh_sj_id
                     WHERE sj.sj_df = 0 AND sj.sj_aprd = 0 AND yh.yh_df = 0
                     ORDER BY sj.sj_ctime";
