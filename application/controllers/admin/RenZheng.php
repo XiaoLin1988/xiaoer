@@ -16,7 +16,6 @@ class RenZheng extends Admin_Controller
     public function index() {
         $this->add_stylesheet('assets/css/bootstrap-table.min.css');
 
-
         $this->add_script('assets/js/bootstrap/bootstrap-table.min.js', 'head');
         $this->add_script('assets/js/bootstrap/tableExport.js', 'head');
         $this->add_script('assets/js/bootstrap/bootstrap-table-export-m.js', 'head');
