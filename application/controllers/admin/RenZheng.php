@@ -11,6 +11,7 @@ class RenZheng extends Admin_Controller
     public function __construct()
     {
         parent::__construct();
+        $this->load->model('Shangjia_model', 'shangjia');
     }
 
     public function index() {
@@ -23,4 +24,12 @@ class RenZheng extends Admin_Controller
 
         $this->loadView('renzheng');
     }
+
+    public function getRenzhengList() {
+
+        $ret = $this->shangjia->getRenzhengList();
+        echo json_encode($ret);
+
+    }
+
 }

@@ -116,4 +116,19 @@ class Shangjia_model extends CI_Model{
 
         return $ret;
     }
+
+    public function getRenzhengList() {
+
+        $query = "SELECT sj.* , yh.yh_id, yh.yh_name, yh.yh_headimgurl, (select img.img_path from tbl_image img WHERE img.img_type = 6 AND img.img_df = 0 AND img.img_fid = sj.sj_id) as renzhengImages
+                    FROM tbl_shangjia sj RIGHT JOIN tbl_yonghu yh on sj.sj_id = yh.yh_sj_id
+                    WHERE sj.sj_df = 0 AND sj.sj_aprd = 0 AND yh.yh_df = 0
+                    ORDER BY sj.sj_ctime";
+
+        $ret = $this->db->query($query)->result_array();
+
+        return $ret;
+    }
+
+
+
 }

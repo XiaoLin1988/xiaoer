@@ -55,6 +55,10 @@
                     title: '用户名'
                 },
                 {
+                    field: 'rzImage',
+                    title: '用户 image'
+                },
+                {
                     field: 'rzContactNumber',
                     title: '联系人电话'
                 },
@@ -99,6 +103,9 @@
 
 <script>
     var tblData = [];
+
+
+
 
     var rz1 = new RenZheng(1, "2017/11/2", "王一", "18715250377", "LN_185616616", "2017/11/4", "通过");
     tblData.push(rz1);
