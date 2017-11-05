@@ -82,11 +82,8 @@ class Yonghu extends MY_Controller
         $result = array();
 
         $key = '';
-        if (isset($_POST['name'])) {
-            $key = $_POST['name'];
-        }
-        if (isset($_POST['phone'])) {
-            $key = $_POST['phone'];
+        if (isset($_POST['query'])) {
+            $key = $_POST['query'];
         }
 
         $ret = $this->yonghu->search($key);
