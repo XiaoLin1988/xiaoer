@@ -91,6 +91,6 @@ class Yonghu extends MY_Controller
         $result['status'] = true;
         $result['data'] = $ret;
 
-        echo json_encode($ret);
+        echo json_encode($result);
     }
 }
