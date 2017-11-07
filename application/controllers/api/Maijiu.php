@@ -26,13 +26,16 @@ class Maijiu extends MY_Controller
             'mj_bx_id' => $_POST['baoxiangId'],
             'mj_jl_id' => $_POST['jingliId'],
             'mj_price' => $_POST['price'],
-            'mj_atime' => $_POST['atime'],
             'mj_aprd' => 0,
             'mj_stts' => 1,
             'mj_ctime' => time(),
             'mj_utime' => time(),
             'mj_df' => 0
         );
+
+        if (isset($_POST['atime'])) {
+            $data['mj_atime'] = $_POST['atime'];
+        }
 
         $ret = $this->maijiu->create($data);
         if (gettype($ret) == "boolean") {

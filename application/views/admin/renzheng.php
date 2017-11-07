@@ -43,24 +43,9 @@
         $('#table tbody').on('click', '.btn-deny', function () {
             var index = $(this).parents('tr').data('index');
             var data = $('#table').bootstrapTable('getData')[index];
-            var rzId = data.rzId;
+            var sj_id = data.sj_id;
 
-            $.ajax({
-                url : "renzheng/update",
-                type: 'post',
-                dataType : "json",
-                data : {
-                    "sj_aprd": 0,
-                    "shangjiaId" : sj_id
-                },
-                success : function(response){
-                    if (response.status == true) {
-                        alert('successfully denied');
-                    } else {
-                        alert('deny failed');
-                    }
-                }
-            });
+            approveShangjia(sj_id, 0);
         });
 
         $('#table tbody').on( 'click', '.btn-detail', function () {
@@ -88,7 +73,7 @@
                             field: 'sj_id',
                             values: [sj_id]
                         });
-                    } else if (value == 2) {
+                    } else if (value == 0) {
                         alert('successfully denied');
                     }
                 } else {

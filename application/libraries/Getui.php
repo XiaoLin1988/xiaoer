@@ -53,8 +53,11 @@ class Getui {
 
         $rep = $igt->pushMessageToApp($message,"任务组名");
 
+        /*
         var_dump($rep);
         echo ("<br><br>");
+        */
+        return $rep;
     }
 
     public function setTemplate($type) {
