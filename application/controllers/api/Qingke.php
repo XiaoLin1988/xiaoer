@@ -19,6 +19,8 @@ class Qingke extends MY_Controller {
     public function create() {
         $result = array();
 
+        $qk_code = $this->createVerificationCode(11);
+
         $qingkeData = array(
             'qk_sender_id' => $_POST['sender_id'],
             'qk_receiver_id' => $_POST['receiver_id'],
@@ -26,7 +28,7 @@ class Qingke extends MY_Controller {
             'qk_bx_id' => $_POST['bx_id'],
             'qk_jl_id' => $_POST['jl_id'],
             'qk_stts' => 0,
-            'qk_authcode' => $this->createVerificationCode(11),
+            'qk_authcode' => $qk_code,
             'qk_ctime' => time(),
             'qk_utime' => time(),
             'qk_df' => 0
@@ -57,7 +59,7 @@ class Qingke extends MY_Controller {
             }
 
             $result['status'] = true;
-            $result['data'] = $qk_id;
+            $result['data'] = $qk_code;
         } else {
             $result['status'] = false;
             $result['data'] = 'db error';
