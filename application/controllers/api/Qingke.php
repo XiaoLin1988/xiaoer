@@ -25,13 +25,16 @@ class Qingke extends MY_Controller {
             'qk_sj_id' => $_POST['sj_id'],
             'qk_bx_id' => $_POST['bx_id'],
             'qk_jl_id' => $_POST['jl_id'],
-            'qk_atime' => $_POST['atime'],
             'qk_stts' => 0,
             'qk_authcode' => $this->createVerificationCode(11),
             'qk_ctime' => time(),
             'qk_utime' => time(),
             'qk_df' => 0
         );
+
+        if (isset($_POST['atime'])) {
+            $qingkeData['qk_atime'] = $_POST['atime'];
+        }
 
         $qk_id = $this->qingke->create($qingkeData);
 
