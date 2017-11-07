@@ -42,9 +42,9 @@ class Fujin extends MY_Controller {
                 $mjiuData = array(
                     'mjiu_atype' => 3,
                     'mjiu_action_id' => $fj_id,
-                    'mjiu_type' => $jiu['jiu_type'],
-                    'mjiu_jiu_id' => $jiu['jiu_id'],
-                    'mjiu_count' => $jiu['jiu_count'],
+                    'mjiu_type' => $jiu->jiu_type,
+                    'mjiu_jiu_id' => $jiu->jiu_id,
+                    'mjiu_count' => $jiu->jiu_count,
                     'mjiu_ctime' => $time,
                     'mjiu_utime' => $time,
                     'mjiu_df' => 0

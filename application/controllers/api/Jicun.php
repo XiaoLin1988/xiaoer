@@ -13,6 +13,7 @@ class Jicun extends MY_Controller
     {
         parent::__construct();
         $this->load->model('Jicun_model', 'jicun');
+        $this->load->model('Mjiu_model', 'mjiu');
     }
 
     public function create()
@@ -39,6 +40,23 @@ class Jicun extends MY_Controller
             $result['status'] = false;
             $result['data'] = "db error";
         } else {
+            $time = time();
+            $mjiu = json_decode($_POST['mjiu']);
+            foreach($mjiu as $jiu) {
+                $mjiuData = array(
+                    'mjiu_atype' => 4,
+                    'mjiu_action_id' => $ret,
+                    'mjiu_type' => $jiu->jiu_type,
+                    'mjiu_jiu_id' => $jiu->jiu_id,
+                    'mjiu_count' => $jiu->jiu_count,
+                    'mjiu_ctime' => $time,
+                    'mjiu_utime' => $time,
+                    'mjiu_df' => 0
+                );
+
+                $this->mjiu->create($mjiuData);
+            }
+
             $result['status'] = true;
             $result['data'] = $ret;
         }
