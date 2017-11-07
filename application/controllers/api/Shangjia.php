@@ -193,7 +193,7 @@ class Shangjia extends MY_Controller {
             $data['name'] = '';
         }
 
-        if(isset($_POST['atime'])) {
+        if(isset($_POST['atime']) and $_POST['atime'] != null) {
             $data['atime'] = $_POST['atime'];
         } else {
             $data['atime'] = '0';
