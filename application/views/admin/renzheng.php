@@ -18,11 +18,13 @@
     function operationFormatter(value, row, index) {
         var btnAccept = "";
         var btnDeny = "";
+        var btnDetail = "";
 
         btnAccept = '<button class="btn btn-success btn-xs btn-accept">通过</button>';
-        btnDeny = '<button class="btn btn-danger btn-xs btn-deny">失败</button>';
+        btnDeny = '<button class="btn btn-danger btn-xs btn-deny">不通过</button>';
+        btnDetail = '<button class="btn btn-info btn-xs btn-detail">查看资料</button>';
 
-        return '<div style="white-space: nowrap;">' + btnAccept + "&nbsp;&nbsp;&nbsp;" + btnDeny + '</div>';
+        return '<div style="white-space: nowrap;">' + btnAccept + "&nbsp;&nbsp;&nbsp;" + btnDeny + "&nbsp;&nbsp;&nbsp;" + btnDetail + '</div>';
     }
 
     function imgLinkFormatter(value, row, index) {
@@ -59,6 +61,13 @@
                     }
                 }
             });
+        });
+
+        $('#table tbody').on( 'click', '.btn-detail', function () {
+            var index = $(this).parents('tr').data('index');
+            var data = $('#table').bootstrapTable('getData')[index];
+
+            openShangjiaModal(data);
         });
     }
 
@@ -136,13 +145,14 @@
             data: tblData
         });
         $('#table').bootstrapTable('refresh');
-
+        /*
         $('#table > tbody > tr').click(function(e) {
             var index = $(this).data('index');
             var data = $('#table').bootstrapTable('getData')[index];
 
             openShangjiaModal(data);
         });
+        */
 
         setTableButtonListener();
     }
@@ -206,7 +216,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" id="btnAccept" class="btn btn-success">通过</button>
-                <button type="button" id="btnDeny" class="btn btn-danger">失败</button>
+                <button type="button" id="btnDeny" class="btn btn-danger">不通过</button>
                 <button type="button" class="btn btn-warning" data-dismiss="modal">取消</button>
             </div>
         </div>

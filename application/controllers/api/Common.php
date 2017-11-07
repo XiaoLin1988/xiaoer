@@ -30,6 +30,8 @@ class Common extends MY_Controller {
                 $file .= 'jiu/';
             } else if ($_POST['type'] == 3 or $_POST['type'] == 4) {
                 $file .= 'avatar/';
+            } else if ($_POST['type'] == 6) {
+                $file .= 'renzheng/';
             }
 
             $file .= time().'.png';

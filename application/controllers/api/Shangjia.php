@@ -110,11 +110,9 @@ class Shangjia extends MY_Controller {
             $data['sj_etime'] = $_POST['etime'];
         }
 
-        /*
         if (isset($_POST['addr'])) {
             $data['sj_addr'] = $_POST['addr'];
         }
-        */
 
         if (isset($_POST['province'])) {
             $data['sj_province'] = $_POST['province'];
