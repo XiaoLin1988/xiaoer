@@ -26,12 +26,15 @@ class Fujin extends MY_Controller {
             'fj_sj_id' => $_POST['sj_id'],
             'fj_bx_id' => $_POST['bx_id'],
             'fj_jl_id' => $_POST['jl_id'],
-            'fj_atime' => $_POST['atime'],
             'fj_stts' => 0,
             'fj_ctime' => time(),
             'fj_utime' => time(),
             'fj_df' => 0
         );
+
+        if (isset($_POST['atime'])) {
+            $fujinData['fj_atime'] = $_POST['atime'];
+        }
 
         $fj_id = $this->fujin->create($fujinData);
 
