@@ -43,7 +43,10 @@ class RenZheng extends Admin_Controller
         if (isset($_POST['sj_aprd']) and isset($_POST['shangjiaId'])) {
             $data = array('sj_aprd' => $_POST['sj_aprd']);
             $this->shangjia->update($data, $_POST['shangjiaId']);
-            $this->getui->pushMessageToApp();
+            if ($_POST['sj_aprd'] == 1)
+                $this->getui->pushMessageToApp('商家通过了');
+            else
+                $this->getui->pushMessageToApp('商家不通过了');
             $result['status'] = true;
             $result['data'] = 'success';
         } else {

@@ -23,10 +23,11 @@ class Getui {
 
     }
 
-    public function pushMessageToApp(){
+    public function pushMessageToApp($text = '不是小三，是小二'){
         $igt = new IGeTui(HOST,APPKEY,MASTERSECRET);
         //定义透传模板，设置透传内容，和收到消息是否立即启动启用
         $template = $this->IGtNotificationTemplateDemo();
+        $template->set_text($text);
         //$template = IGtLinkTemplateDemo();
         // 定义"AppMessage"类型消息对象，设置消息内容模板、发送的目标App列表、是否支持离线发送、以及离线消息有效期(单位毫秒)
         $message = new IGtAppMessage();
@@ -88,7 +89,7 @@ class Getui {
         $this->_message = $message;
     }
 
-    public function setMessage($template, $pushtype=1, $online=false, $expire=3600*12*1000, $worktype=0) {
+    public function setMessage($template, $pushtype=1, $online=false, $expire=43200000, $worktype=0) {
         switch ($pushtype) {
             case 2:  //支持对多个用户进行推送，建议为50个用户
                 $message = new PushMessageToList();
