@@ -244,6 +244,6 @@ class Shangjia extends MY_Controller {
     }
 
     public function send() {
-        $template = $this->getui->pushMessageToApp();
+        $this->getui->pushMessageToApp();
     }
 }
