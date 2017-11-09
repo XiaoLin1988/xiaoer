@@ -295,4 +295,47 @@ class Getui {
 
         return $template;
     }
+
+    public function pushMessageToSingle($clientId = '10a0fc89eb34e6a2b43517afda710632'){
+        //$igt = new IGeTui(HOST,APPKEY,MASTERSECRET);
+        $igt = new IGeTui(NULL,APPKEY,MASTERSECRET,false);
+
+        //消息模版：
+        // 1.TransmissionTemplate:透传功能模板
+        // 2.LinkTemplate:通知打开链接功能模板
+        // 3.NotificationTemplate：通知透传功能模板
+        // 4.NotyPopLoadTemplate：通知弹框下载功能模板
+
+//    	$template = IGtNotyPopLoadTemplateDemo();
+//    	$template = IGtLinkTemplateDemo();
+//    	$template = IGtNotificationTemplateDemo();
+        $template = new IGtTransmissionTemplate();
+
+        //个推信息体
+        $message = new IGtSingleMessage();
+
+        $message->set_isOffline(true);//是否离线
+        $message->set_offlineExpireTime(3600*12*1000);//离线时间
+        $message->set_data($template);//设置推送消息类型
+//	$message->set_PushNetWorkType(0);//设置是否根据WIFI推送消息，1为wifi推送，0为不限制推送
+        //接收方
+        $target = new IGtTarget();
+        $target->set_appId(APPID);
+        $target->set_clientId($clientId);
+//    $target->set_alias(Alias);
+
+
+        try {
+            $rep = $igt->pushMessageToSingle($message, $target);
+            var_dump($rep);
+            echo ("<br><br>");
+
+        }catch(RequestException $e){
+            $requstId =e.getRequestId();
+            $rep = $igt->pushMessageToSingle($message, $target, $requstId);
+            var_dump($rep);
+            echo ("<br><br>");
+        }
+
+    }
 }
