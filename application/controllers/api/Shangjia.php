@@ -247,4 +247,22 @@ class Shangjia extends MY_Controller {
         //$this->getui->pushMessageToApp();
         $this->getui->pushMessageToSingle();
     }
+
+    public function sendPushtoSingle() {
+
+        $deviceToken = "dbccac9f47ed0a912a89a085c27122d738c53ff164485f04ab57a78d437139da";
+
+        $this->getui->pushMessageToSingleIOS($deviceToken, "Hello, title", "Hello, Information");
+    }
+
+    public function sendPushtoMulti() {
+
+        $deviceToken = "dbccac9f47ed0a912a89a085c27122d738c53ff164485f04ab57a78d437139da";
+        $sixDeviceToken = "65f0afad45dfa0724174ae3a4e19589eb6c4d6725f1fccff111bcb15a7ac0df3";
+        $androidToken = "10a0fc89eb34e6a2b43517afda710632";
+        $deviceTokenList = array($deviceToken,$androidToken );
+
+        $this->getui->pushMessageToMulti($deviceTokenList, "Hello, title", "Hello, Information");
+    }
+
 }

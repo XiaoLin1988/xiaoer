@@ -58,6 +58,14 @@ class Yonghu_model extends CI_Model{
         return $ret;
     }
 
+    public function getByShangjiaId($sj_id) {
+        $query = "SELECT * FROM tbl_yonghu WHERE yh_sj_id={$sj_id}";
+
+        $ret = $this->db->query($query)->result_array();
+
+        return $ret;
+    }
+
     public function getByOpenId($openId) {
         $query = "SELECT * FROM tbl_yonghu WHERE yh_openId='{$openId}'";
 

@@ -57,6 +57,19 @@ class Baoxiang_model extends CI_Model{
         return $res;
     }
 
+    public function getById($bx_id) {
+        $query = "
+            SELECT
+                *
+            FROM
+                tbl_baoxiang
+            WHERE
+                bx_df = 0 AND bx_id = {$bx_id}";
+        $res = $this->db->query($query)->result_array();
+
+        return $res;
+    }
+
     public function search($data) {
         $query = "
             SELECT

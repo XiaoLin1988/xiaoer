@@ -11,6 +11,12 @@ class Dingzuo extends MY_Controller {
     public function __construct() {
         parent::__construct();
         $this->load->model('Dingzuo_model', 'dingzuo');
+        $this->load->model('Shangjia_model', 'shangjia');
+        $this->load->model('Yonghu_model', 'yonghu');
+        $this->load->model('Baoxiang_model', 'baoxiang');
+        $this->load->model('Jingli_model', 'jingli');
+
+        $this->load->library('Getui', 'getui');
     }
 
     public function create() {
@@ -36,6 +42,7 @@ class Dingzuo extends MY_Controller {
         } else {
             $result['status'] = true;
             $result['data'] = $ret;
+            $this->sendPushtoShopOwner($data, $ret);
         }
 
         echo json_encode($result);
@@ -87,6 +94,57 @@ class Dingzuo extends MY_Controller {
 
     public function detail($dz_id) {
 
+    }
+
+    // send notification to shop owner with Yuding request.
+    public function sendPushtoShopOwner($data, $yudingId) {
+
+        $buyerId = $data['dz_buyer_id'];
+        $shangjiaId = $data['dz_sj_id'];
+        $baoxiangId = $data['dz_bx_id'];
+        $atime = $data['dz_atime'];
+        $pcount = $data['dz_pcount'];
+        $jingliId = $data['dz_jl_id'];
+
+        // get data from request
+        $buyerData = $this->yonghu->getById($buyerId);
+        $shopOwnerData = $this->yonghu->getByShangjiaId($shangjiaId);
+        $baoxiangData = $this->baoxiang->getById( $baoxiangId);
+        $jingliData = $this->jingli->getById($jingliId);
+
+        // get shop owner device token
+        $deviceToken = $shopOwnerData[0]["yh_deviceId"];
+        //$deviceToken = "dbccac9f47ed0a912a89a085c27122d738c53ff164485f04ab57a78d437139da";
+
+        // make push sentence. e.g user<xx> request to yuding Baoxiang/Kazuo <xxx> of your Restaurant. Accept/Deny ?
+        $sentence = "user<{$buyerData[0]["yh_name"]}> request to yuding ";
+
+        // check baoxiang or kazuo 1: 包厢   2: 卡座
+        if ( $baoxiangData[0]["bx_type"] == 1 ) { // baoxiang
+            $sentence = $sentence . "Baoxiang<{$baoxiangData[0]["bx_name"]}> of your Restaurant. ";
+        }
+        else if ( $baoxiangData[0]["bx_type"] == 2 ) {
+            $sentence = $sentence . "Kazuo<{$baoxiangData[0]["bx_name"]}> of your Restaurant. ";
+        }
+
+        // check jingli
+        if ($jingliId != 0) { // if user select jingli
+            $sentence = $sentence . "he want jingli <{$jingliData[0]["jl_name"]}>.";
+        }
+
+        $sentence = $sentence . "pcount; {$pcount} , atime: {$atime}";
+
+        $this->getui->pushActionToSingleIOS($deviceToken, $sentence, $yudingId);
+    }
+
+    public function sendPushtoMulti() {
+
+        $deviceToken = "dbccac9f47ed0a912a89a085c27122d738c53ff164485f04ab57a78d437139da";
+        $sixDeviceToken = "65f0afad45dfa0724174ae3a4e19589eb6c4d6725f1fccff111bcb15a7ac0df3";
+        $androidToken = "10a0fc89eb34e6a2b43517afda710632";
+        $deviceTokenList = array($deviceToken,$androidToken );
+
+        $this->getui->pushMessageToMulti($deviceTokenList, "Hello, title", "Hello, Information");
     }
 
 }

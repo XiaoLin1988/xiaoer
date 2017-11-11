@@ -36,7 +36,7 @@ class Getui {
         $message->set_data($template);
 
         $appIdList=array(APPID);
-        $phoneTypeList=array('ANDROID');
+        //$phoneTypeList=array('ANDROID');
         $provinceList=array('浙江');
         $tagList=array('haha');
         //用户属性
@@ -60,6 +60,68 @@ class Getui {
         */
         return $rep;
     }
+
+    function pushMessageToSingleIOS($token,$title,$yudingId) {
+
+        $igt = new IGeTui(HOST,APPKEY,MASTERSECRET);
+        $template = new IGtAPNTemplate();
+        $template->set_pushInfo("按钮名称", 1, $title, "", $title, "", "", "");
+
+        $message = new IGtSingleMessage();
+        $message->set_isOffline(true);//是否离线
+        $message->set_offlineExpireTime(3600*12*1000);//离线时间
+        $message->set_data($template);//设置推送消息类型
+        $message->set_PushNetWorkType(0);//设置是否根据WIFI推送消息，1为wifi推送，0为不限制推送
+
+        $rep = $igt->pushAPNMessageToSingle(APPID,$token,$message);
+
+    }
+
+
+    function pushActionToSingleIOS($token,$title,$yudingId) {
+
+        $igt = new IGeTui(HOST,APPKEY,MASTERSECRET);
+        $template = new IGtAPNTemplate();
+
+        //iOS推送需要设置的pushInfo字段
+        $apn = new IGtAPNPayload();
+        $alertmsg=new DictionaryAlertMsg();
+        $alertmsg->body= $title;
+        //IOS8.2 支持
+        $alertmsg->title= "YuDing Info";
+
+        $apn->alertMsg=$alertmsg;
+        $apn->badge=1;
+        $apn->add_customMsg("yudingId",$yudingId);
+        $apn->contentAvailable=1;
+        $apn->category="PushCategory_YuDing";
+        $template->set_apnInfo($apn);
+
+
+        $message = new IGtSingleMessage();
+        $message->set_isOffline(true);//是否离线
+        $message->set_offlineExpireTime(3600*12*1000);//离线时间
+        $message->set_data($template);//设置推送消息类型
+        $message->set_PushNetWorkType(0);//设置是否根据WIFI推送消息，1为wifi推送，0为不限制推送
+
+        $rep = $igt->pushAPNMessageToSingle(APPID,$token,$message);
+
+    }
+
+    function pushMessageToMulti($tokenList,$title,$infomation) {
+
+        $igt = new IGeTui(HOST,APPKEY,MASTERSECRET);
+        $template = new IGtAPNTemplate();
+        $template->set_pushInfo("按钮名称", 1, $title, "", $infomation, "", "", "");
+
+        putenv("needDetails=true");
+        $listmessage = new IGtListMessage();
+        $listmessage->set_data($template);
+        $contentId = $igt->getAPNContentId(APPID, $listmessage);
+        $ret = $igt->pushAPNMessageToList(APPID, $contentId, $tokenList);
+    }
+
+
 
     public function setTemplate($type) {
         switch ($type) {
@@ -195,6 +257,7 @@ class Getui {
      * @return IGtNotificationTemplate
      */
     public function IGtNotificationTemplate(){
+
         $template =  new IGtNotificationTemplate();
         $template->set_appId(APPID);//应用appid
         $template->set_appkey(APPKEY);//应用appkey

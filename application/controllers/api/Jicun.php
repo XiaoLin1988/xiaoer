@@ -104,6 +104,34 @@ class Jicun extends MY_Controller
         $result['data'] = $res;
 
         echo json_encode($result);
+
+        $result = array();
+
+//        $ret = $this->qingke->getByShangjia($_POST['sj_id']);
+//        if (sizeof($ret) > 0) {
+//            foreach ($ret as $qk) {
+//                $sender = $this->yonghu->getById($qk['qk_sender_id']);
+//                if(sizeof($sender) > 0)
+//                    $qk['sender'] = $sender[0];
+//                else
+//                    $qk['sender'] = new stdClass();
+//                $receiver = $this->yonghu->getById($qk['qk_receiver_id']);
+//                if(sizeof($receiver) > 0)
+//                    $qk['receiver'] = $receiver[0];
+//                else
+//                    $qk['sender'] = new stdClass();
+//                $data = $this->mjiu->getAll(2, $qk['qk_id']);    //atype, action_id
+//                $qk['mjiu'] = $data;
+//            }
+//
+//            $result['status'] = true;
+//            $result['data'] = $qk;
+//        } else {
+//            $result['status'] = true;
+//            $result['data'] = [];
+//        }
+//
+//        echo json_encode($result);
     }
 
     public function getYonghude() {

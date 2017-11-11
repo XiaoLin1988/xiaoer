@@ -39,6 +39,14 @@ class Jingli_model extends CI_Model{
         return $res;
     }
 
+    public function getById($id) {
+        $query = "select * from tbl_jingli WHERE jl_id = {$id}";
+
+        $res = $this->db->query($query)->result_array();
+
+        return $res;
+    }
+
     public function delete($id) {
 
         $query = "Update tbl_jingli SET jl_df = 1  WHERE jl_id = ".$id;
