@@ -38,11 +38,13 @@ class Yonghu extends MY_Controller
         } else {
             $data['yh_rlng'] = 116.41390830754092;
         }
+        /*
         if (isset($_POST['addr'])) {
             $data['yh_raddr'] = $_POST['addr'];
         } else {
             $data['yh_raddr'] = "北京市东城区";
         }
+        */
 
         // check user existing
         $ret = $this->yonghu->getByOpenId($_POST['openId']);

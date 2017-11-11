@@ -281,17 +281,17 @@ class Getui {
 
     public function IGtNotificationTemplateDemo(){
         $template =  new IGtNotificationTemplate();
-        $template->set_appId(APPID);                   //应用appid
-        $template->set_appkey(APPKEY);                 //应用appkey
-        $template->set_transmissionType(1);            //透传消息类型
-        $template->set_transmissionContent("测试离线");//透传内容
-        $template->set_title("通知");                  //通知栏标题
-        $template->set_text("不是小三，是小二");     //通知栏内容
-        $template->set_logo("");                       //通知栏logo
-        $template->set_logoURL("");                    //通知栏logo链接
-        $template->set_isRing(true);                   //是否响铃
-        $template->set_isVibrate(true);                //是否震动
-        $template->set_isClearable(true);              //通知栏是否可清除
+        $template->set_appId(APPID);                                  //应用appid
+        $template->set_appkey(APPKEY);                                //应用appkey
+        $template->set_transmissionType(1);                           //透传消息类型
+        $template->set_transmissionContent("测试离线");                //透传内容
+        $template->set_title("通知");                                 //通知栏标题
+        $template->set_text("不是小三，是小二");                       //通知栏内容
+        $template->set_logo("");                                      //通知栏logo
+        $template->set_logoURL("");                                   //通知栏logo链接
+        $template->set_isRing(true);                                  //是否响铃
+        $template->set_isVibrate(true);                               //是否震动
+        $template->set_isClearable(true);                             //通知栏是否可清除
 
         return $template;
     }
@@ -317,13 +317,12 @@ class Getui {
         $message->set_isOffline(true);//是否离线
         $message->set_offlineExpireTime(3600*12*1000);//离线时间
         $message->set_data($template);//设置推送消息类型
-//	$message->set_PushNetWorkType(0);//设置是否根据WIFI推送消息，1为wifi推送，0为不限制推送
+        //$message->set_PushNetWorkType(0);//设置是否根据WIFI推送消息，1为wifi推送，0为不限制推送
         //接收方
         $target = new IGtTarget();
         $target->set_appId(APPID);
         $target->set_clientId($clientId);
-//    $target->set_alias(Alias);
-
+        //$target->set_alias(Alias);
 
         try {
             $rep = $igt->pushMessageToSingle($message, $target);

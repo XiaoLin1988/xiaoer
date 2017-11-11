@@ -71,6 +71,61 @@ class Common extends MY_Controller {
         echo json_encode($result);
     }
 
+    public function imageMultiUpload() {
+        $result = array();
+        $data = array();
+        $root = 'uploads/';
+
+        if (!isset($_FILES['images'])) {
+            $result['status'] = false;
+            $result['data'] = 'Please select image to upload';
+        } else if (!isset($_POST['type']) or !isset($_POST['foreign_id'])) {
+            $result['status'] = false;
+            $result['data'] = 'Please select your image type';
+        } else {
+            if ($_POST['type'] == 1) {
+                $root .= 'shangjia/';
+            } else if ($_POST['type'] == 2 or $_POST['type'] == 5) {
+                $root .= 'jiu/';
+            } else if ($_POST['type'] == 3 or $_POST['type'] == 4) {
+                $root .= 'avatar/';
+            } else if ($_POST['type'] == 6) {
+                $root .= 'renzheng/';
+            }
+
+            $upFiles = $_FILES['images'];
+
+            for ($i = 0; $i < sizeof($upFiles['tmp_name']); $i++) {
+                $file = $root . $this->createVerificationCode(20) . ".png";
+                if (file_exists($file)) {
+                    chmod($file, 0755);
+                    unlink($file);
+                }
+
+                $ret = move_uploaded_file($upFiles['tmp_name'][$i], $file);
+                if ($ret == TRUE) {
+                    $key_value = array(
+                        'img_path' => $file,
+                        'img_type' => $_POST['type'],
+                        'img_fid' => $_POST['foreign_id'],
+                        'img_ctime' => time(),
+                        'img_utime' => time(),
+                        'img_df' => 0
+                    );
+                    $ret = $this->common->imageUpload($key_value);
+                    if ($ret == TRUE) {
+                        array_push($data, $file);
+                    }
+                }
+            }
+
+            $result['status'] = true;
+            $result['data'] = $data;
+        }
+
+        echo json_encode($result);
+    }
+
     public function imageUpdate() {
         $result = array();
 
