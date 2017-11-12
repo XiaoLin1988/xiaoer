@@ -38,4 +38,14 @@ class Jiu_Model extends CI_Model{
         return $res;
     }
 
+    public function detail($id) {
+        $res = $this->db->query("select * from tbl_jiu WHERE jiu_df=0 and jiu_id = ".$id)->result_array();
+        return $res;
+    }
+
+    public function getImages($id, $type) {
+        $res = $this->db->query("select img_path from tbl_image WHERE img_df=0 and img_type = ".$type." and img_fid = ".$id." order by img_ctime")->result_array();
+        return $res;
+    }
+
 }

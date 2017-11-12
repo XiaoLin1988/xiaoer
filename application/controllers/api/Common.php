@@ -96,7 +96,9 @@ class Common extends MY_Controller {
             $upFiles = $_FILES['images'];
 
             for ($i = 0; $i < sizeof($upFiles['tmp_name']); $i++) {
+
                 $file = $root . $this->createVerificationCode(20) . ".png";
+
                 if (file_exists($file)) {
                     chmod($file, 0755);
                     unlink($file);
@@ -113,6 +115,7 @@ class Common extends MY_Controller {
                         'img_df' => 0
                     );
                     $ret = $this->common->imageUpload($key_value);
+
                     if ($ret == TRUE) {
                         array_push($data, $file);
                     }
@@ -124,6 +127,7 @@ class Common extends MY_Controller {
         }
 
         echo json_encode($result);
+
     }
 
     public function imageUpdate() {

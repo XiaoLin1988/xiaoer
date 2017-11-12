@@ -56,7 +56,16 @@ class Jiu extends MY_Controller {
         echo json_encode($result);
     }
 
-    public function detail($jiu_id) {
+    public function detail() {
+
+        // get details information for each jiu
+        $res = $this->jiu->detail(18);
+        $res[0]["jiu_avatars"] = $this->jiu->getImages(18, 2);
+
+        $result['status'] = true;
+        $result['data'] = $res;
+
+        echo json_encode($result);
 
     }
 
