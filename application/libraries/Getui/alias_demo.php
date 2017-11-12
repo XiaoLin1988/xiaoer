@@ -7,15 +7,6 @@ header("Content-Type: text/html; charset=utf-8");
 
 require_once(dirname(__FILE__) . '/' . 'IGt.Push.php');
 
-define('APPKEY','');
-define('APPID','');
-define('MASTERSECRET','');
-define('CID','');
-define('DEVICETOKEN','');
-define('Alias','请输入别名');
-define('HOST','http://sdk.open.api.igexin.com/apiex.htm');
-//define('CID2','请输入ClientID');
-
 //pushMessageToSingle();
 
 pushMessageToList();

@@ -117,6 +117,8 @@ class Common extends MY_Controller {
                     $ret = $this->common->imageUpload($key_value);
 
                     if ($ret == TRUE) {
+                        $d = array('test' => $file);
+                        //array_push($data, $d);
                         array_push($data, $file);
                     }
                 }

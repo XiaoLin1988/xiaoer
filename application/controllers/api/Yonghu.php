@@ -28,23 +28,15 @@ class Yonghu extends MY_Controller
             'yh_utime' => time(),
             'yh_df' => 0
         );
-        if (isset($_POST['lat']) and $_POST['lat'] != 0) {
+        if (isset($_POST['lat'])) {
             $data['yh_rlat'] = $_POST['lat'];
-        } else {
-            $data['yh_rlat'] = 39.910373663527416;
         }
-        if (isset($_POST['lng']) and $_POST['lng'] != 0) {
+        if (isset($_POST['lng'])) {
             $data['yh_rlng'] = $_POST['lng'];
-        } else {
-            $data['yh_rlng'] = 116.41390830754092;
         }
-        /*
         if (isset($_POST['addr'])) {
             $data['yh_raddr'] = $_POST['addr'];
-        } else {
-            $data['yh_raddr'] = "北京市东城区";
         }
-        */
 
         // check user existing
         $ret = $this->yonghu->getByOpenId($_POST['openId']);

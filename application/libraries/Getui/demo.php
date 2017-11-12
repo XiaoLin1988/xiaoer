@@ -9,19 +9,6 @@ require_once(dirname(__FILE__) . '/' . 'igetui/template/IGt.BaseTemplate.php');
 require_once(dirname(__FILE__) . '/' . 'IGt.Batch.php');
 require_once(dirname(__FILE__) . '/' . 'igetui/utils/AppConditions.php');
 
-//http的域名
-define('HOST','http://sdk.open.api.igexin.com/apiex.htm');
-
-//https的域名
-//define('HOST','https://api.getui.com/apiex.htm');
-               
-
-define('APPKEY','');
-define('APPID','');
-define('MASTERSECRET','');
-define('CID','');
-define('DEVICETOKEN','');
-define('Alias','请输入别名');
 //define('BEGINTIME','2015-03-06 13:18:00');
 //define('ENDTIME','2015-03-06 13:24:00');
 

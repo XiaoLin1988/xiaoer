@@ -9,20 +9,6 @@ require_once(dirname(__FILE__) . '/' . 'igetui/template/IGt.BaseTemplate.php');
 require_once(dirname(__FILE__) . '/' . 'IGt.Batch.php');
 require_once(dirname(__FILE__) . '/' . 'igetui/utils/AppConditions.php');
 
-//http的域名
-define('HOST','http://sdk.open.api.igexin.com/apiex.htm');
-
-
-//定义常量, appId、appKey、masterSecret 采用本文档 "第二步 获取访问凭证 "中获得的应用配置               
-define('APPKEY','pTyRBiB2te9j9x5Uixdkj7');
-define('APPID','f6e3VSlD7s7IWprBTplCA8');
-define('MASTERSECRET','DM5o3wJkg07hN6JqMQdPK4');
-
-//define('BEGINTIME','2015-03-06 13:18:00');
-//define('ENDTIME','2015-03-06 13:24:00');
-
-
-
 pushMessageToApp();
 //群推接口案例
 function pushMessageToApp(){
