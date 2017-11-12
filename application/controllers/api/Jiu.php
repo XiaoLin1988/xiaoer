@@ -46,21 +46,27 @@ class Jiu extends MY_Controller {
 
     public function get() {
         $result = array();
+        $tmpRes = array();
         $sj_id = $_POST['shangjiaId'];
 
         $res = $this->jiu->get($sj_id);
 
+        foreach ($res as $jiuItem) {
+            $jiuItem["jiu_avatars"] = $this->jiu->getImages($jiuItem["jiu_id"], 2);
+            array_push($tmpRes, $jiuItem);
+        }
+
         $result['status'] = true;
-        $result['data'] = $res;
+        $result['data'] = $tmpRes;
 
         echo json_encode($result);
     }
 
-    public function detail() {
+    public function detail($id) {
 
         // get details information for each jiu
-        $res = $this->jiu->detail(18);
-        $res[0]["jiu_avatars"] = $this->jiu->getImages(18, 2);
+        $res = $this->jiu->detail($id);
+        $res[0]["jiu_avatars"] = $this->jiu->getImages($id, 2);
 
         $result['status'] = true;
         $result['data'] = $res;
