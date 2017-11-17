@@ -99,4 +99,21 @@ class Yonghu extends MY_Controller
 
         echo json_encode($result);
     }
+
+    public function registerDevice() {
+        $result = array();
+
+        $data = array(
+            'yh_deviceId' => $_POST['deviceId']
+        );
+
+        $ret = $this->yonghu->update($data, $_POST['id']);
+
+        $result['status'] = $ret;
+        $result['data'] = 'success';
+
+        echo json_encode($result);
+    }
+
+
 }
