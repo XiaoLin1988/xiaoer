@@ -75,4 +75,21 @@ class Jiu extends MY_Controller {
 
     }
 
+    public function delete() {
+        $result = array();
+        $id = $_POST['id'];
+
+        $ret = $this->jiu->delete($id);
+
+        if ($ret) {
+            $result['status'] = true;
+            $result['data'] = $ret;
+        } else {
+            $result['status'] = false;
+            $result['data'] = "db error";
+        }
+
+        echo json_encode($result);
+    }
+
 }
