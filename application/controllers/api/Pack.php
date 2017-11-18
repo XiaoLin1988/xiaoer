@@ -20,8 +20,7 @@ class Pack extends MY_Controller {
             'pk_sj_id' => $_POST['shangjiaId'],
             'pk_name' => $_POST['name'],
             'pk_price' => $_POST['price'],
-            'pk_sale' => $_POST['sale'],
-            'pk_set' => $_POST['set'],
+            'pk_detail' => $_POST['pk_detail'],
             'pk_pcount' => $_POST['pcount'],
             'pk_ctime' => time(),
             'pk_utime' => time(),
@@ -54,6 +53,23 @@ class Pack extends MY_Controller {
 
     public function detail($pk_id) {
 
+    }
+
+    public function delete() {
+        $result = array();
+        $id = $_POST['id'];
+
+        $ret = $this->pack->delete($id);
+
+        if ($ret) {
+            $result['status'] = true;
+            $result['data'] = $ret;
+        } else {
+            $result['status'] = false;
+            $result['data'] = "db error";
+        }
+
+        echo json_encode($result);
     }
 
 }

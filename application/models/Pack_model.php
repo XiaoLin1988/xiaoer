@@ -37,5 +37,13 @@ class Pack_model extends CI_Model{
         return $res;
     }
 
+    public function delete($id) {
+
+        $query = "Update tbl_pack SET pk_df = 1  WHERE pk_id = ".$id;
+
+        $res = $this->db->query($query);
+
+        return $res;
+    }
 
 }
