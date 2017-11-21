@@ -75,9 +75,9 @@ $query_builder = TRUE;
 
 $db['default'] = array(
 	'dsn'	=> '',
-	'hostname' => '192.168.0.208',
-	'username' => 'master',
-	'password' => 'master',
+	'hostname' => '101.37.30.64',
+	'username' => 'remote',
+	'password' => 'remote',
 	'database' => 'xiaoer',
 	'dbdriver' => 'mysqli',
 	'dbprefix' => '',
