@@ -15,7 +15,6 @@ class Shangjia extends MY_Controller {
         $this->lang->load('shangjia');
 
         $this->load->library('Getui', 'getui');
-        $this->load->library('GetuiDemo', 'getuidemo');
     }
 
     public function create() {
@@ -246,8 +245,8 @@ class Shangjia extends MY_Controller {
 
     public function send() {
         //$this->getui->pushMessageToApp();
-        //$this->getui->pushMessageToSingleAndroid();
-        $this->getuidemo->pushMessageToApp();
+        $this->getui->pushMessageToSingleAndroid();
+        //$this->getuidemo->pushMessageToApp();
     }
 
     public function sendPushtoSingle() {

@@ -106,7 +106,36 @@ class Getui {
         $rep = $igt->pushAPNMessageToSingle(GETUI_APPID, $token, $message);
     }
 
-    function pushMessageToSingleAndroid($cid = 'de5a288e790455eb964b1399210f439b'){
+    function pushActionToSingleAndroid($token, $title, $variableName, $yudingId) {
+        $igt = new IGeTui(GETUI_HOST,GETUI_APPKEY, GETUI_MASTERSECRET);
+        //消息模版：
+        // 4.NotyPopLoadTemplate：通知弹框下载功能模板
+        $template = $this->IGtTransmissionTemplate();
+        //定义"SingleMessage"
+        $message = new IGtSingleMessage();
+        $message->set_isOffline(true);//是否离线
+        $message->set_offlineExpireTime(3600*12*1000);//离线时间
+        $message->set_data($template);//设置推送消息类型
+        //$message->set_PushNetWorkType(0);//设置是否根据WIFI推送消息，2为4G/3G/2G，1为wifi推送，0为不限制推送
+        //接收方
+        $target = new IGtTarget();
+        $target->set_appId(GETUI_APPID);
+        $target->set_clientId($token);
+
+        try {
+            $rep = $igt->pushMessageToSingle($message, $target);
+            var_dump($rep);
+            echo ("<br><br>");
+        }catch(RequestException $e) {
+            $requstId =e.getRequestId();
+            //失败时重发
+            $rep = $igt->pushMessageToSingle($message, $target,$requstId);
+            var_dump($rep);
+            echo ("<br><br>");
+        }
+    }
+
+    function pushMessageToSingleAndroid($token, $title = '', $variableName = '', $yudingId = ''){
         $igt = new IGeTui(GETUI_HOST,GETUI_APPKEY, GETUI_MASTERSECRET);
         //消息模版：
         // 4.NotyPopLoadTemplate：通知弹框下载功能模板
@@ -120,7 +149,7 @@ class Getui {
         //接收方
         $target = new IGtTarget();
         $target->set_appId(GETUI_APPID);
-        $target->set_clientId($cid);
+        $target->set_clientId($token);
 
         try {
             $rep = $igt->pushMessageToSingle($message, $target);
@@ -163,10 +192,6 @@ class Getui {
         $end = "2018-02-28 15:31:24";
         $template->set_duration($begin,$end);
         return $template;
-    }
-
-    function pushActionToSingleAndroid($token,$title,$yudingId) {
-
     }
 
     function pushMessageToMulti($tokenList,$title,$infomation) {

@@ -65,7 +65,6 @@ class Dingzuo extends MY_Controller {
         echo json_encode($result);
     }
 
-
     public function getShangjiade() {
         $result = array();
         $sj_id = $_POST['shangjiaId'];
@@ -143,6 +142,11 @@ class Dingzuo extends MY_Controller {
         $sentence = $sentence . "pcount; {$pcount} , atime: {$atime}";
 
         $this->getui->pushActionToSingleIOS($deviceToken, $sentence, "yudingId", $yudingId);
+        $this->getui->pushActionToSingleAndroid($deviceToken, $sentence, "yudingId", $yudingId);
+    }
+
+    public function send() {
+        $this->getui->pushMessageToSingleAndroid('f7a4d9dd84ee84fe72bb80274b5137e8', 'testing', "yudingId", 1);
     }
 
     public function sendPushtoMulti() {

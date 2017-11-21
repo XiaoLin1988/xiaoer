@@ -93,6 +93,7 @@ class Qingke extends MY_Controller {
 
         $ret = $this->qingke->getByShangjia($_POST['sj_id']);
         if (sizeof($ret) > 0) {
+            $data = array();
             foreach ($ret as $qk) {
                 $sender = $this->yonghu->getById($qk['qk_sender_id']);
                 if(sizeof($sender) > 0)
@@ -104,12 +105,14 @@ class Qingke extends MY_Controller {
                     $qk['receiver'] = $receiver[0];
                 else
                     $qk['sender'] = new stdClass();
-                $data = $this->mjiu->getAll(2, $qk['qk_id']);    //atype, action_id
-                $qk['mjiu'] = $data;
+                $mjiu = $this->mjiu->getAll(2, $qk['qk_id']);    //atype, action_id
+                $qk['mjiu'] = $mjiu;
+
+                array_push($data, $qk);
             }
 
             $result['status'] = true;
-            $result['data'] = $qk;
+            $result['data'] = $data;
         } else {
             $result['status'] = true;
             $result['data'] = [];
