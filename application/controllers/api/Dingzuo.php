@@ -29,7 +29,7 @@ class Dingzuo extends MY_Controller {
             'dz_atime' => $_POST['atime'],
             'dz_pcount' => $_POST['pcount'],
             'dz_jl_id' => $_POST['jingliId'],
-            'dz_stts' => 1,
+            'dz_stts' => 1, // pendingf
             'dz_ctime' => time(),
             'dz_utime' => time(),
             'dz_df' => 0
@@ -71,6 +71,10 @@ class Dingzuo extends MY_Controller {
         $sj_id = $_POST['shangjiaId'];
         $stts = $_POST['status'];
 
+        if ($stts == 3) { // complteted status, include 4 (cancel), 5 (deny)
+            $stts = "3 or dz.dz_stts = 4 or dz.dz_stts = 5 ";
+        }
+
         $res = $this->dingzuo->getShangjiade($sj_id, $stts);
 
         $result['status'] = true;
@@ -83,6 +87,10 @@ class Dingzuo extends MY_Controller {
         $result = array();
         $yh_id = $_POST['yonghuId'];
         $stts = $_POST['status'];
+
+        if ($stts == 3) { // complteted status, include 4 (cancel), 5 (deny)
+            $stts = "3 or dz.dz_stts = 4 or dz.dz_stts = 5 ";
+        }
 
         $res = $this->dingzuo->getYonghude($yh_id, $stts);
 
@@ -134,7 +142,7 @@ class Dingzuo extends MY_Controller {
 
         $sentence = $sentence . "pcount; {$pcount} , atime: {$atime}";
 
-        $this->getui->pushActionToSingleIOS($deviceToken, $sentence, $yudingId);
+        $this->getui->pushActionToSingleIOS($deviceToken, $sentence, "yudingId", $yudingId);
     }
 
     public function sendPushtoMulti() {
@@ -146,5 +154,216 @@ class Dingzuo extends MY_Controller {
 
         $this->getui->pushMessageToMulti($deviceTokenList, "Hello, title", "Hello, Information");
     }
+
+
+    // cancel by user : cancel status： 4
+    public function cancelByUser() {
+        
+        $result = array();
+        $data = array();
+
+        $data['dz_stts'] = 4;
+        $dingzuoId = $_POST['dingzuoId'];
+
+        // update dingzuo status to canceled status.
+        $ret = $this->dingzuo->update($data, $dingzuoId);
+
+        if ($ret == true ) {
+            // here send push to sj master ;; buyer canceled his dingzuo request.
+
+            // first get available information for push
+            $data = $this->dingzuo->getDetailsById($dingzuoId);
+
+            $buyerId = $data[0]['dz_buyer_id'];
+            $shangjiaId = $data[0]['dz_sj_id'];
+            $baoxiangId = $data[0]['dz_bx_id'];
+
+            $buyerData = $this->yonghu->getById($buyerId);
+            $shopOwnerData = $this->yonghu->getByShangjiaId($shangjiaId);
+            $baoxiangData = $this->baoxiang->getById( $baoxiangId);
+
+            // get shop owner device token
+            $deviceToken = $shopOwnerData[0]["yh_deviceId"];
+            $sentence = "user<{$buyerData[0]["yh_name"]}> canceled dingzuo request";
+
+            $this->getui->pushMessageToSingleIOS($deviceToken, $sentence);
+
+            $result['status'] = $ret;
+            $result['data'] = 'success';
+        }
+        else {
+            $result['status'] = $ret;
+            $result['data'] = 'updating db failed';
+        }
+        
+
+        echo json_encode($result);
+    }
+
+
+
+    // accept By ShangJia Owner : accept status： 2
+    public function accept() {
+        
+        $result = array();
+        $data = array();
+
+        $data['dz_stts'] = 2;
+        $dingzuoId = $_POST['dingzuoId'];
+
+        // update dingzuo status to accept status.
+        $ret = $this->dingzuo->update($data, $dingzuoId);
+
+        if ($ret == true ) {
+            // here send push to user ;; *** shop owner accepted your dingzuo request.
+
+            // first get available information for push
+            $data = $this->dingzuo->getDetailsById($dingzuoId);
+
+            $buyerId = $data[0]['dz_buyer_id'];
+            $shangjiaId = $data[0]['dz_sj_id'];
+
+            $buyerData = $this->yonghu->getById($buyerId);
+            $shopData = $this->shangjia->detail($shangjiaId);
+
+            // get shop owner device token
+            $deviceToken = $buyerData[0]["yh_deviceId"];
+            $sentence = "Shop <{$shopData[0]["sj_name"]}> owner accepted your dingzuo request";
+
+            $this->getui->pushMessageToSingleIOS($deviceToken, $sentence);
+
+            $result['status'] = $ret;
+            $result['data'] = 'success';
+        }
+        else {
+            $result['status'] = $ret;
+            $result['data'] = 'updating db failed';
+        }
+        
+
+        echo json_encode($result);
+    }
+
+    // deny By ShangJia Owner : accept status： 5
+    public function deny() {
+        
+        $result = array();
+        $data = array();
+
+        $data['dz_stts'] = 5;
+        $dingzuoId = $_POST['dingzuoId'];
+
+        // update dingzuo status to accept status.
+        $ret = $this->dingzuo->update($data, $dingzuoId);
+
+        if ($ret == true ) {
+            // here send push to user ;; *** shop owner accepted your dingzuo request.
+
+            // first get available information for push
+            $data = $this->dingzuo->getDetailsById($dingzuoId);
+
+            $buyerId = $data[0]['dz_buyer_id'];
+            $shangjiaId = $data[0]['dz_sj_id'];
+
+            $buyerData = $this->yonghu->getById($buyerId);
+            $shopData = $this->shangjia->detail($shangjiaId);
+
+            // get shop owner device token
+            $deviceToken = $buyerData[0]["yh_deviceId"];
+            $sentence = "Shop <{$shopData[0]["sj_name"]}> owner denyed your dingzuo request because there are some issues.";
+
+            $this->getui->pushMessageToSingleIOS($deviceToken, $sentence);
+            
+
+            $result['status'] = $ret;
+            $result['data'] = 'success';
+        }
+        else {
+            $result['status'] = $ret;
+            $result['data'] = 'updating db failed';
+        }
+        
+
+        echo json_encode($result);
+    }
+
+    // sent complete request By ShangJia Owner : simple push :)
+    public function completerequest() {
+        
+        $result = array();
+
+        $dingzuoId = $_POST['dingzuoId'];
+
+        // here send push to user ;; *** shop owner accepted your dingzuo request.
+
+        // first get available information for push
+        $data = $this->dingzuo->getDetailsById($dingzuoId);
+
+        $buyerId = $data[0]['dz_buyer_id'];
+        $shangjiaId = $data[0]['dz_sj_id'];
+
+        $buyerData = $this->yonghu->getById($buyerId);
+        $shopData = $this->shangjia->detail($shangjiaId);
+
+        // get shop owner device token
+        $deviceToken = $buyerData[0]["yh_deviceId"];
+        $sentence = "Shop <{$shopData[0]["sj_name"]}> owner wants you to complete current jiaoyi";
+
+        $result['status'] = true;
+        $result['data'] = 'success';
+        echo json_encode($result);
+
+        //$this->getui->pushMessageToSingleIOS($deviceToken, $sentence);
+        $this->getui->pushActionToSingleIOS($deviceToken, $sentence, "dingzuoId", $dingzuoId);
+        
+    }
+
+
+    // complete By user : completed status： 3
+    public function complete() {
+        
+        $result = array();
+        $data = array();
+
+        $data['dz_stts'] = 3;
+        $dingzuoId = $_POST['dingzuoId'];
+
+        // update dingzuo status to accept status.
+        $ret = $this->dingzuo->update($data, $dingzuoId);
+
+        if ($ret == true ) {
+            // here send push to user ;; *** shop owner accepted your dingzuo request.
+
+            // first get available information for push
+            $data = $this->dingzuo->getDetailsById($dingzuoId);
+
+            $buyerId = $data[0]['dz_buyer_id'];
+            $shangjiaId = $data[0]['dz_sj_id'];
+            $baoxiangId = $data[0]['dz_bx_id'];
+
+            $buyerData = $this->yonghu->getById($buyerId);
+            $shopOwnerData = $this->yonghu->getByShangjiaId($shangjiaId);
+            $baoxiangData = $this->baoxiang->getById( $baoxiangId);
+
+            // get shop owner device token
+            $deviceToken = $shopOwnerData[0]["yh_deviceId"];
+            $sentence = "user<{$buyerData[0]["yh_name"]}> completed dingzuo jiaoyi - baoxiangName is {$baoxiangData[0]["bx_name"]}";
+
+            $this->getui->pushMessageToSingleIOS($deviceToken, $sentence);
+            
+
+            $result['status'] = $ret;
+            $result['data'] = 'success';
+            
+        }
+        else {
+            $result['status'] = $ret;
+            $result['data'] = 'updating db failed';
+        }
+        
+        echo json_encode($result);
+        
+    }
+
 
 }

@@ -104,7 +104,7 @@ class Shangjia_model extends CI_Model{
               tbl_shangjia sj
             WHERE
               sj.sj_df = 0
-              AND sj.sj_name LIKE '%{$data['name']}%' AND sj_aprd=1";
+              AND sj.sj_name LIKE '%{$data['name']}%' AND sj_type=1  AND sj_aprd=1";
 
         $ret = $this->db->query($query)->result_array();
 
@@ -126,11 +126,11 @@ class Shangjia_model extends CI_Model{
 
         $query = "
             SELECT
-              sj.*
+              sj.*, (SELECT img_path FROM tbl_image tp WHERE tp.img_type=1 AND tp.img_fid=sj.sj_id) as avatar
             FROM
-              tbl_shangjia
+              tbl_shangjia sj
             WHERE
-              sj_df = 0 AND sj_name LIKE '%{$name}%' AND sj_type=0 AND sj_aprd=1 ";
+              sj.sj_df = 0 AND sj.sj_name LIKE '%{$name}%' AND sj.sj_type=0 AND sj.sj_aprd=1 ";
 
         $ret = $this->db->query($query)->result_array();
 

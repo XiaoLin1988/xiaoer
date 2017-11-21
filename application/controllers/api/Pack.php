@@ -20,7 +20,7 @@ class Pack extends MY_Controller {
             'pk_sj_id' => $_POST['shangjiaId'],
             'pk_name' => $_POST['name'],
             'pk_price' => $_POST['price'],
-            'pk_detail' => $_POST['pk_detail'],
+            'pk_detail' => $_POST['details'],
             'pk_pcount' => $_POST['pcount'],
             'pk_ctime' => time(),
             'pk_utime' => time(),
@@ -71,5 +71,5 @@ class Pack extends MY_Controller {
 
         echo json_encode($result);
     }
-
+    
 }

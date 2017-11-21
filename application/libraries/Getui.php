@@ -77,7 +77,7 @@ class Getui {
 
     }
 
-    function pushActionToSingleIOS($token, $title, $yudingId) {
+    function pushActionToSingleIOS($token, $title, $variableName, $yudingId) {
 
         $igt = new IGeTui(GETUI_HOST,GETUI_APPKEY,GETUI_MASTERSECRET);
         $template = new IGtAPNTemplate();
@@ -91,7 +91,7 @@ class Getui {
 
         $apn->alertMsg=$alertmsg;
         $apn->badge=1;
-        $apn->add_customMsg("yudingId",$yudingId);
+        $apn->add_customMsg($variableName,$yudingId);
         $apn->contentAvailable=1;
         $apn->category="PushCategory_YuDing";
         $template->set_apnInfo($apn);
@@ -106,16 +106,13 @@ class Getui {
         $rep = $igt->pushAPNMessageToSingle(GETUI_APPID, $token, $message);
     }
 
-    function pushMessageToSingleAndroid($cid = '10a0fc89eb34e6a2b43517afda710632'){
-        $igt = new IGeTui(GETUI_HOST, GETUI_APPKEY, GETUI_MASTERSECRET);
-
+    function pushMessageToSingleAndroid($cid = 'de5a288e790455eb964b1399210f439b'){
+        $igt = new IGeTui(GETUI_HOST,GETUI_APPKEY, GETUI_MASTERSECRET);
         //消息模版：
         // 4.NotyPopLoadTemplate：通知弹框下载功能模板
-        $template = $this->IGtNotificationTemplateDemo();
-
+        $template = $this->IGtNotyPopLoadTemplateDemo();
         //定义"SingleMessage"
         $message = new IGtSingleMessage();
-
         $message->set_isOffline(true);//是否离线
         $message->set_offlineExpireTime(3600*12*1000);//离线时间
         $message->set_data($template);//设置推送消息类型
@@ -129,14 +126,43 @@ class Getui {
             $rep = $igt->pushMessageToSingle($message, $target);
             var_dump($rep);
             echo ("<br><br>");
-
-        }catch(RequestException $e){
+        }catch(RequestException $e) {
             $requstId =e.getRequestId();
             //失败时重发
-            $rep = $igt->pushMessageToSingle($message, $target, $requstId);
+            $rep = $igt->pushMessageToSingle($message, $target,$requstId);
             var_dump($rep);
             echo ("<br><br>");
         }
+    }
+
+    function IGtNotyPopLoadTemplateDemo(){
+        $template = new IGtNotyPopLoadTemplate();
+        $template ->set_appId(GETUI_APPID); //应用appid
+        $template ->set_appkey(GETUI_APPKEY); //应用appkey
+        //通知栏
+        $template ->set_notyTitle("个推"); //通知栏标题
+        $template ->set_notyContent("个推最新版点击下载"); //通知栏内容
+        $template ->set_notyIcon(""); //通知栏logo
+        $template ->set_isBelled(true); //是否响铃
+        $template ->set_isVibrationed(true); //是否震动
+        $template ->set_isCleared(true); //通知栏是否可清除
+        //弹框
+        $template ->set_popTitle("弹框标题"); //弹框标题
+        $template ->set_popContent("弹框内容"); //弹框内容
+        $template ->set_popImage(""); //弹框图片
+        $template ->set_popButton1("下载"); //左键
+        $template ->set_popButton2("取消"); //右键
+        //下载
+        $template ->set_loadIcon(""); //弹框图片
+        $template ->set_loadTitle("地震速报下载");
+        $template ->set_loadUrl("http://dizhensubao.igexin.com/dl/com.ceic.apk");
+        $template ->set_isAutoInstall(false);
+        $template ->set_isActived(true);
+        //设置通知定时展示时间，结束时间与开始时间相差需大于6分钟，消息推送后，客户端将在指定时间差内展示消息（误差6分钟）
+        $begin = "2017-02-28 15:26:22";
+        $end = "2018-02-28 15:31:24";
+        $template->set_duration($begin,$end);
+        return $template;
     }
 
     function pushActionToSingleAndroid($token,$title,$yudingId) {
@@ -421,34 +447,4 @@ class Getui {
         }
     }
 
-    function IGtNotyPopLoadTemplateDemo(){
-        $template =  new IGtNotyPopLoadTemplate();
-        $template ->set_appId(GETUI_APPID);                      //应用GETUI_APPID
-        $template ->set_appkey(GETUI_APPKEY);                    //应用GETUI_APPKEY
-        //通知栏
-        $template ->set_notyTitle("个推");                 //通知栏标题
-        $template ->set_notyContent("个推最新版点击下载"); //通知栏内容
-        $template ->set_notyIcon("");                      //通知栏logo
-        $template ->set_isBelled(true);                    //是否响铃
-        $template ->set_isVibrationed(true);               //是否震动
-        $template ->set_isCleared(true);                   //通知栏是否可清除
-        //弹框
-        $template ->set_popTitle("弹框标题");              //弹框标题
-        $template ->set_popContent("弹框内容");            //弹框内容
-        $template ->set_popImage("");                      //弹框图片
-        $template ->set_popButton1("下载");                //左键
-        $template ->set_popButton2("取消");                //右键
-        //下载
-        $template ->set_loadIcon("");                      //弹框图片
-        $template ->set_loadTitle("地震速报下载");
-        $template ->set_loadUrl("http://dizhensubao.igexin.com/dl/com.ceic.apk");
-        $template ->set_isAutoInstall(false);
-        $template ->set_isActived(true);
-
-        //设置通知定时展示时间，结束时间与开始时间相差需大于6分钟，消息推送后，客户端将在指定时间差内展示消息（误差6分钟）
-        $begin = "2015-02-28 15:26:22";
-        $end = "2015-02-28 15:31:24";
-        $template->set_duration($begin,$end);
-        return $template;
-    }
 }

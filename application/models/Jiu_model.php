@@ -30,7 +30,7 @@ class Jiu_Model extends CI_Model{
         }
     }
 
-    public function get($shangjiaId) {``
+    public function get($shangjiaId) {
         $res = $this->db->query("select * from tbl_jiu WHERE jiu_df=0 and  jiu_sj_id = ".$shangjiaId)->result_array();
         return $res;
     }
@@ -47,7 +47,7 @@ class Jiu_Model extends CI_Model{
 
     public function delete($id) {
 
-        $query = "Update tbl_image SET jiu_df = 1  WHERE jiu_id = ".$id;
+        $query = "Update tbl_jiu SET jiu_df = 1  WHERE jiu_id = ".$id;
 
         $res = $this->db->query($query);
 
