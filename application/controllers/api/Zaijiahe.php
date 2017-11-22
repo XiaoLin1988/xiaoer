@@ -80,7 +80,7 @@ class Zaijiahe extends MY_Controller {
         }
 
         $data = array();
-        $zaijiahe = $this->maijiu->getZaijiahe($_POST['buyerId'], $stts);
+        $zaijiahe = $this->maijiu->getZaijiaheByYonghu($_POST['buyerId'], $stts);
         foreach ($zaijiahe as $zj) {
             $zj['mjiu'] = array();
 
@@ -103,7 +103,6 @@ class Zaijiahe extends MY_Controller {
                         $pack['jiu_count'] = $mj['mjiu_count'];
                         array_push($zj['mjiu'], $pack);
                     }
-
                 }
             }
             array_push($data, $zj);
