@@ -50,7 +50,7 @@
                 </li>
 
                 <li>
-                    <a  href="user"><i class="fa fa-qrcode fa-3x"></i> Tabs & Panels</a>
+                    <a class="<?php if($menu_selected == 'tixian') echo 'active-menu';?>" href="<?php echo site_url('admin/tixian'); ?>"><i class="fa fa-money fa-3x"></i>商家提现</a>
                 </li>
 
                 <li>
