@@ -56,7 +56,7 @@
     }
 
     function operationFormatter(value, row, index) {
-        return '<input type="button" class="btn btn-success btn-sm btn-problem" value="Complete">';
+        return '<input type="button" class="btn btn-success btn-sm btn-problem" value="交易完成">';
     }
 
     function makeTixian (trade_type, trade_no) {
@@ -90,41 +90,41 @@
             columns: [
                 {
                     field: 'shangjia',
-                    title: 'Shangjia'
+                    title: '商家'
                 },
                 {
                     field: 'trade_type',
                     formatter: 'tradeTypeFormatter',
-                    title: 'Trade Type'
+                    title: '交易类型'
                 },
                 {
                     field: 'trade_no',
                     formatter: 'tradeNoFormatter',
-                    title: 'Trade Number'
+                    title: '交易代码'
                 },
                 {
                     field: 'trade_items',
                     formatter: 'tradeItemsFormatter',
-                    title: 'Trade Items'
+                    title: '订单内容'
                 },
                 {
                     field: 'sender',
-                    title: 'Sender'
+                    title: '买单用户'
                 },
                 {
                     field: 'amount',
                     formatter: 'totalAmountFormatter',
-                    title: 'Amount'
+                    title: '支付金额'
                 },
                 {
                     field: 'fund',
                     formatter: 'payAmountFormatter',
-                    title: 'Amount to Pay'
+                    title: '提现金额'
                 },
                 {
                     field: 'operation',
                     formatter: 'operationFormatter',
-                    title: 'Operation'
+                    title: '操作'
                 }
             ],
             data: tblData

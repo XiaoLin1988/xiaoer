@@ -19,7 +19,8 @@ $config['app_config'] = array(
         'head'	=> array(
             'assets/js/jquery.min.js',
             'assets/js/jquery-ui.js',
-            'assets/js/bootstrap.min.js'
+            'assets/js/bootstrap.min.js',
+            'assets/js/swal/sweet-alert.js'
         ),
         'foot'	=> array(
             'assets/js/jquery.metisMenu.js',
@@ -34,6 +35,7 @@ $config['app_config'] = array(
         'assets/css/bootstrap.css',
         'assets/css/font-awesome.css',
         'assets/js/morris/morris-0.4.3.min.css',
-        'assets/css/custom.css'
+        'assets/css/custom.css',
+        'assets/css/swal/sweet-alert.css'
     )
 );
