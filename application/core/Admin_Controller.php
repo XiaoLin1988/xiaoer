@@ -31,7 +31,7 @@ class Admin_Controller extends CI_Controller
         $this->mStyles = empty($config['stylesheets']) ? array() : $config['stylesheets'];
     }
 
-    public function loadView($page) {
+    public function loadView($page, $layout = 'widget') {
         $this->mViewData['site_name'] = $this->mSiteName;
         $this->mViewData['page_title'] = $this->mPageTitle;
         $this->mViewData['login_time'] = date('Y:m:d');
@@ -39,6 +39,7 @@ class Admin_Controller extends CI_Controller
         $this->mViewData['javascripts'] = $this->mScripts;
 
         $this->load->view('admin/_partials/header', $this->mViewData);
+        $this->load->view('admin/_partials/'.$layout);
         $this->load->view('admin/'.$page, $this->mViewData);
         $this->load->view('admin/_partials/footer', $this->mViewData);
     }

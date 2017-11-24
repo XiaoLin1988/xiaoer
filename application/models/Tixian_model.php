@@ -50,6 +50,7 @@ class Tixian_model extends CI_Model
             ";
         $jicun = $this->db->query($jicunQuery)->result_array();
 
+        /*
         $zaijiQuery = "
                 SELECT
                     mj_id as trade_no, mj_buyer_id as sender, mj_sj_id as shangjia, 1 as trade_type
@@ -57,6 +58,7 @@ class Tixian_model extends CI_Model
                     tbl_maijiu WHERE mj_stts=7
             ";
         $zaijiahe = $this->db->query($zaijiQuery)->result_array();
+        */
 
         $maijiuQuery = "
                 SELECT
@@ -77,11 +79,11 @@ class Tixian_model extends CI_Model
         foreach ($jicun as $j) {
             array_push($data, $j);
         }
-
+        /*
         foreach ($zaijiahe as $z) {
             array_push($data, $z);
         }
-
+        */
         foreach ($maijiu as $m) {
             array_push($data, $m);
         }

@@ -53,6 +53,10 @@ class Tixian extends Admin_Controller
         $trade_type = $_POST['trade_type'];
         $trade_no = $_POST['trade_no'];
 
-        $this->tixian->update($trade_type, $trade_no);
+        $res = $this->tixian->update($trade_type, $trade_no);
+
+        $result['status'] = $res;
+
+        echo json_encode($result);
     }
 }

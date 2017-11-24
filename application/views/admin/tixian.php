@@ -72,15 +72,11 @@
             },
             success : function(response){
                 if (response.status == true) {
-                    if (value == 1) {
-                        alert('successfully accepted');
-                        $('#table').bootstrapTable('remove', {
-                            field: 'trade_no',
-                            values: [sj_id]
-                        });
-                    } else if (value == 0) {
-                        alert('successfully denied');
-                    }
+                    alert('successfully accepted');
+                    $('#table').bootstrapTable('remove', {
+                        field: 'trade_no',
+                        values: [trade_no]
+                    });
                 } else {
                     alert('error occured');
                 }
