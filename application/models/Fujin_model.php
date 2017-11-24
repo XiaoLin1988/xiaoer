@@ -74,4 +74,12 @@ class Fujin_model extends CI_Model {
 
         return $ret;
     }
+
+    public function getDetailsById($id) {
+        $query = "SELECT * FROM tbl_fujin WHERE fj_id={$id}";
+
+        $ret = $this->db->query($query)->result_array();
+
+        return $ret;
+    }
 }

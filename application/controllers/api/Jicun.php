@@ -5,6 +5,7 @@
  * User: macmini
  * Date: 10/22/17
  * Time: 10:05 PM
+ * 
  */
 class Jicun extends MY_Controller
 {
@@ -13,7 +14,15 @@ class Jicun extends MY_Controller
     {
         parent::__construct();
         $this->load->model('Jicun_model', 'jicun');
+        $this->load->model('MaiJiu_model', 'maijiu');
         $this->load->model('Mjiu_model', 'mjiu');
+        $this->load->model('Jiu_model', 'jiu');
+        $this->load->model('Pack_model', 'pack');
+        $this->load->model('Yonghu_model', 'yonghu');
+        $this->load->model('Shangjia_model', 'shangjia');
+
+        $this->load->library('Getui', 'getui');
+
     }
 
     public function create()
@@ -26,8 +35,8 @@ class Jicun extends MY_Controller
             'jc_sj_id' => $_POST['shangjiaId'],
             'jc_bx_id' => $_POST['baoxiangId'],
             'jc_jl_id' => $_POST['jingliId'],
-            'jc_savingtime' => 7,
-            'jc_signed' => 1,
+            'jc_savingtime' => $_POST['savingTime'],
+            'jc_signed' => 0,
             'jc_aprd' => 0,
             'jc_stts' => 1,
             'jc_ctime' => time(),
@@ -40,25 +49,23 @@ class Jicun extends MY_Controller
             $result['status'] = false;
             $result['data'] = "db error";
         } else {
-            $time = time();
-            $mjiu = json_decode($_POST['mjiu']);
-            foreach($mjiu as $jiu) {
-                $mjiuData = array(
-                    'mjiu_atype' => 4,
-                    'mjiu_action_id' => $ret,
-                    'mjiu_type' => $jiu->jiu_type,
-                    'mjiu_jiu_id' => $jiu->jiu_id,
-                    'mjiu_count' => $jiu->jiu_count,
-                    'mjiu_ctime' => $time,
-                    'mjiu_utime' => $time,
-                    'mjiu_df' => 0
-                );
-
-                $this->mjiu->create($mjiuData);
-            }
-
             $result['status'] = true;
             $result['data'] = $ret;
+
+            // send push to shop owner to accept created jicun
+            
+            $yonghuId = $_POST['saverId'];
+            $shangjiaId = $_POST['shangjiaId'];
+
+            $buyerData = $this->yonghu->getById($yonghuId);
+            $shopOwnerData = $this->yonghu->getByShangjiaId($shangjiaId);
+
+            // get shop owner device token
+            $deviceToken = $shopOwnerData[0]["yh_deviceId"];
+            $sentence = "user<{$buyerData[0]["yh_name"]}> created jicun.";
+
+            $this->getui->pushActionToSingleIOS($deviceToken, $sentence, "openShopJicunManagementPage", "123");
+
         }
 
         echo json_encode($result);
@@ -94,6 +101,33 @@ class Jicun extends MY_Controller
     }
 
 
+    // send push notification to shop owner about jicun create request. available info: username, bx name,
+    public function createRequest() {
+        $result = array();
+        $data = array();
+
+        $yonghuId = $_POST['yonghuId'];
+        $shangjiaId = $_POST['shangjiaId'];
+        $bxName = $_POST['bxName'];
+
+        $buyerData = $this->yonghu->getById($yonghuId);
+        $shopOwnerData = $this->yonghu->getByShangjiaId($shangjiaId);
+
+        // get shop owner device token
+        $deviceToken = $shopOwnerData[0]["yh_deviceId"];
+        $sentence = "user<{$buyerData[0]["yh_name"]}> wants jicun, room name : {$bxName}";
+
+        $this->getui->pushMessageToSingleIOS($deviceToken, $sentence);
+
+        $result['status'] = true;
+        $result['data'] = 'success';
+
+
+        echo json_encode($result);
+
+    }   
+
+
     public function getShangjiade() {
         $result = array();
         $sj_id = $_POST['shangjiaId'];
@@ -107,31 +141,6 @@ class Jicun extends MY_Controller
 
         $result = array();
 
-//        $ret = $this->qingke->getByShangjia($_POST['sj_id']);
-//        if (sizeof($ret) > 0) {
-//            foreach ($ret as $qk) {
-//                $sender = $this->yonghu->getById($qk['qk_sender_id']);
-//                if(sizeof($sender) > 0)
-//                    $qk['sender'] = $sender[0];
-//                else
-//                    $qk['sender'] = new stdClass();
-//                $receiver = $this->yonghu->getById($qk['qk_receiver_id']);
-//                if(sizeof($receiver) > 0)
-//                    $qk['receiver'] = $receiver[0];
-//                else
-//                    $qk['sender'] = new stdClass();
-//                $data = $this->mjiu->getAll(2, $qk['qk_id']);    //atype, action_id
-//                $qk['mjiu'] = $data;
-//            }
-//
-//            $result['status'] = true;
-//            $result['data'] = $qk;
-//        } else {
-//            $result['status'] = true;
-//            $result['data'] = [];
-//        }
-//
-//        echo json_encode($result);
     }
 
     public function getYonghude() {
@@ -143,6 +152,126 @@ class Jicun extends MY_Controller
         $result['status'] = true;
         $result['data'] = $res;
 
+        echo json_encode($result);
+    }
+
+/*   pending = "1"  progress = "2" completed = "3" canceled = "4" expired = "5" backrequested = "7"*/
+    public function accept() {
+        $result = array();
+        $data = array();
+
+        $data['jc_stts'] = 2;
+        $jcId = $_POST['jcId'];
+
+        // update maijiu status to accpeted status.
+        $ret = $this->jicun->update($data, $jcId);
+
+        if ($ret == true ) {
+            // here send push to shop owner ;; *** please send dingdan to user <xx> .
+
+            // first get available information for push
+            $data = $this->jicun->getDetailsById($jcId);
+
+            $buyerId = $data[0]['jc_saver_id'];
+            $shangjiaId = $data[0]['jc_sj_id'];
+
+            $buyerData = $this->yonghu->getById($buyerId);
+            $shopData = $this->shangjia->detail($shangjiaId);
+
+            // get shop owner device token
+            $deviceToken = $buyerData[0]["yh_deviceId"];
+            $sentence = "Shop <{$shopData[0]["sj_name"]}> owner accepted your jicun";
+
+            $this->getui->pushMessageToSingleIOS($deviceToken, $sentence);
+
+            $result['status'] = $ret;
+            $result['data'] = 'success';
+        }
+        else {
+            $result['status'] = $ret;
+            $result['data'] = 'updating db failed';
+        }
+        
+        echo json_encode($result);
+    }
+
+
+    public function backRequest() {
+        $result = array();
+        $data = array();
+
+        /*   pending = "1"  progress = "2" completed = "3" canceled = "4" expired = "5" backrequested = "7"*/
+        $data['jc_stts'] = 7;
+        $jcId = $_POST['jcId'];
+
+        // update maijiu status to accpeted status.
+        $ret = $this->jicun->update($data, $jcId);
+
+        if ($ret == true ) {
+
+            // first get available information for push
+            $data = $this->jicun->getDetailsById($jcId);
+
+            $buyerId = $data[0]['jc_saver_id'];
+            $shangjiaId = $data[0]['jc_sj_id'];
+
+            $buyerData = $this->yonghu->getById($buyerId);
+            $shopData = $this->shangjia->detail($shangjiaId);
+            $shopOwnerData = $this->yonghu->getByShangjiaId($shangjiaId);
+
+            // get shop owner device token
+            $deviceToken = $shopOwnerData[0]["yh_deviceId"];
+            $sentence = "user<{$buyerData[0]["yh_name"]}> wants quchu jicun";
+
+            $this->getui->pushMessageToSingleIOS($deviceToken, $sentence);
+
+            $result['status'] = true;
+            $result['data'] = 'success';
+        }
+        else {
+            $result['status'] = $ret;
+            $result['data'] = 'updating db failed';
+        }
+        
+        echo json_encode($result);
+    }
+
+    public function complete() {
+        $result = array();
+        $data = array();
+
+        $data['jc_stts'] = 3;
+        $jcId = $_POST['jcId'];
+
+        // update maijiu status to accpeted status.
+        $ret = $this->jicun->update($data, $jcId);
+
+        if ($ret == true ) {
+            // here send push to shop owner ;; *** please send dingdan to user <xx> .
+            // first get available information for push
+            $data = $this->jicun->getDetailsById($jcId);
+
+            $buyerId = $data[0]['jc_saver_id'];
+            $shangjiaId = $data[0]['jc_sj_id'];
+
+            $buyerData = $this->yonghu->getById($buyerId);
+            $shopData = $this->shangjia->detail($shangjiaId);
+            $shopOwnerData = $this->yonghu->getByShangjiaId($shangjiaId);
+
+            // get shop owner device token
+            $deviceToken = $shopOwnerData[0]["yh_deviceId"];
+            $sentence = "user<{$buyerData[0]["yh_name"]}> completed jicun";
+
+            $this->getui->pushMessageToSingleIOS($deviceToken, $sentence);
+
+            $result['status'] = $ret;
+            $result['data'] = 'success';
+        }
+        else {
+            $result['status'] = $ret;
+            $result['data'] = 'updating db failed';
+        }
+        
         echo json_encode($result);
     }
 
