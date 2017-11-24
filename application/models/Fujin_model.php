@@ -41,8 +41,17 @@ class Fujin_model extends CI_Model {
         return $res;
     }
 
-    public function getByShangjia($sj_id) {
-        $query = "SELECT * FROM tbl_fujin WHERE qk_sj_id={$sj_id}";
+    public function getByShangjia($sj_id, $stts) {
+        $query =
+            "SELECT
+              fj.*,
+              (SELECT sj_name FROM tbl_shangjia sj WHERE sj.sj_id=fj.fj_sj_id) AS sj_name,
+              (SELECT yh_name FROM tbl_yonghu yh WHERE yh.yh_id=fj.fj_sender_id) AS sender_name,
+              (SELECT yh_headimgurl FROM tbl_yonghu yh WHERE yh.yh_id=fj.fj_sender_id) AS sender_headimgurl,
+              (SELECT yh_name FROM tbl_yonghu yh WHERE yh.yh_id=fj.fj_receiver_id) AS receiver_name,
+              (SELECT yh_headimgurl FROM tbl_yonghu yh WHERE yh.yh_id=fj.fj_receiver_id) AS receiver_headimgurl
+            FROM tbl_fujin fj
+            WHERE fj.fj_sj_id={$sj_id} AND fj_stts={$stts}";
 
         $ret = $this->db->query($query)->result_array();
 
@@ -50,7 +59,16 @@ class Fujin_model extends CI_Model {
     }
 
     public function getByYonghu($yh_id, $stts) {
-        $query = "SELECT * FROM tbl_fujin WHERE (fj_sender_id={$yh_id} OR fj_receiver_id={$yh_id}) AND fj_stts={$stts}";
+        $query =
+            "SELECT
+              fj.*,
+              (SELECT sj_name FROM tbl_shangjia sj WHERE sj.sj_id=fj.fj_sj_id) AS sj_name,
+              (SELECT yh_name FROM tbl_yonghu yh WHERE yh.yh_id=fj.fj_sender_id) AS sender_name,
+              (SELECT yh_headimgurl FROM tbl_yonghu yh WHERE yh.yh_id=fj.fj_sender_id) AS sender_headimgurl,
+              (SELECT yh_name FROM tbl_yonghu yh WHERE yh.yh_id=fj.fj_receiver_id) AS receiver_name,
+              (SELECT yh_headimgurl FROM tbl_yonghu yh WHERE yh.yh_id=fj.fj_receiver_id) AS receiver_headimgurl
+            FROM tbl_fujin fj
+            WHERE (fj.fj_sender_id={$yh_id} OR fj.fj_receiver_id={$yh_id}) AND fj_stts={$stts}";
 
         $ret = $this->db->query($query)->result_array();
 

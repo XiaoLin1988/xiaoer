@@ -15,6 +15,7 @@ class Fujin extends MY_Controller {
         $this->load->model('Dingzuo_model', 'dingzuo');
         $this->load->model('Mjiu_model', 'mjiu');
         $this->load->model('Yonghu_model', 'yonghu');
+        $this->load->model('Jiu_model', 'jiu');
     }
 
     public function create() {
@@ -26,7 +27,7 @@ class Fujin extends MY_Controller {
             'fj_sj_id' => $_POST['sj_id'],
             'fj_bx_id' => $_POST['bx_id'],
             'fj_jl_id' => $_POST['jl_id'],
-            'fj_stts' => 0,
+            'fj_stts' => 1,
             'fj_ctime' => time(),
             'fj_utime' => time(),
             'fj_df' => 0
@@ -87,22 +88,44 @@ class Fujin extends MY_Controller {
     }
 
 
-    public function getByShangjia() {
+    public function getShangjiade() {
         $result = array();
 
-        $ret = $this->fujin->getByShangjia($_POST['sj_id']);
+        $ret = $this->fujin->getByShangjia($_POST['shangjiaId'], $_POST['status']);
+
+
+        $data = array();
         if (sizeof($ret) > 0) {
             foreach ($ret as $fj) {
-                $sender = $this->yonghu->getById($fj['fj_sender_id']);
-                $fj['sender'] = $sender[0];
-                $receiver = $this->yonghu->getById($fj['fj_receiver_id']);
-                $fj['receiver'] = $receiver;
-                $data = $this->mjiu->getAll(2, $fj['fj_id']);    //atype, action_id
-                $fj['mjiu'] = $data;
+                $fj['mjiu'] = array();
+
+                $mjiu = $this->mjiu->getAll(3, $fj['fj_id']);
+                foreach($mjiu as $mj) {
+                    if($mj['mjiu_type'] == 1) {
+                        $jiu = $this->jiu->detail($mj['mjiu_jiu_id']);
+                        if(sizeof($jiu) > 0) {
+                            $jiu = $jiu[0];
+                            $avatars = $this->jiu->getImages($jiu['jiu_id'], 2);
+                            $jiu['jiu_count'] = $mj['mjiu_count'];
+                            $jiu['jiu_avatars'] = $avatars;
+
+                            array_push($fj['mjiu'], $jiu);
+                        }
+                    } else if ($mj['mjiu_type'] == 2) {
+                        $pack = $this->pack->detail($mj['mjiu_jiu_id']);
+                        if (sizeof($pack) > 0) {
+                            $pack = $pack[0];
+                            $pack['jiu_count'] = $mj['mjiu_count'];
+                            array_push($fj['mjiu'], $pack);
+                        }
+
+                    }
+                }
+                array_push($data, $fj);
             }
 
             $result['status'] = true;
-            $result['data'] = $fj;
+            $result['data'] = $data;
         } else {
             $result['status'] = true;
             $result['data'] = [];
@@ -111,29 +134,42 @@ class Fujin extends MY_Controller {
         echo json_encode($result);
     }
 
-    public function getByYonghu() {
+    public function getYonghude() {
         $result = array();
 
-        $ret = $this->fujin->getByYonghu($_POST['yh_id'], $_POST['stts']);
-
+        $data = array();
+        $ret = $this->fujin->getByYonghu($_POST['yonghuId'], $_POST['status']);
         if (sizeof($ret) > 0) {
             foreach ($ret as $fj) {
-                $sender = $this->yonghu->getById($fj['fj_sender_id']);
-                if(sizeof($sender) > 0)
-                    $fj['sender'] = $sender[0];
-                else
-                    $fj['sender'] = new stdClass();
-                $receiver = $this->yonghu->getById($fj['fj_receiver_id']);
-                if(sizeof($receiver) > 0)
-                    $fj['receiver'] = $receiver[0];
-                else
-                    $fj['receiver'] = new stdClass();
-                $data = $this->mjiu->getAll(2, $fj['fj_id']);    //atype, action_id
-                $fj['mjiu'] = $data;
+                $fj['mjiu'] = array();
+
+                $mjiu = $this->mjiu->getAll(3, $fj['fj_id']);
+                foreach($mjiu as $mj) {
+                    if($mj['mjiu_type'] == 1) {
+                        $jiu = $this->jiu->detail($mj['mjiu_jiu_id']);
+                        if(sizeof($jiu) > 0) {
+                            $jiu = $jiu[0];
+                            $avatars = $this->jiu->getImages($jiu['jiu_id'], 2);
+                            $jiu['jiu_count'] = $mj['mjiu_count'];
+                            $jiu['jiu_avatars'] = $avatars;
+
+                            array_push($fj['mjiu'], $jiu);
+                        }
+                    } else if ($mj['mjiu_type'] == 2) {
+                        $pack = $this->pack->detail($mj['mjiu_jiu_id']);
+                        if (sizeof($pack) > 0) {
+                            $pack = $pack[0];
+                            $pack['jiu_count'] = $mj['mjiu_count'];
+                            array_push($fj['mjiu'], $pack);
+                        }
+
+                    }
+                }
+                array_push($data, $fj);
             }
 
             $result['status'] = true;
-            $result['data'] = $fj;
+            $result['data'] = $data;
         } else {
             $result['status'] = true;
             $result['data'] = [];
