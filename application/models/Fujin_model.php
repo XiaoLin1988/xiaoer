@@ -46,29 +46,35 @@ class Fujin_model extends CI_Model {
             "SELECT
               fj.*,
               (SELECT sj_name FROM tbl_shangjia sj WHERE sj.sj_id=fj.fj_sj_id) AS sj_name,
+              (SELECT sj_addr FROM tbl_shangjia sj WHERE sj.sj_id=fj.fj_sj_id) AS sj_addr,
               (SELECT yh_name FROM tbl_yonghu yh WHERE yh.yh_id=fj.fj_sender_id) AS sender_name,
               (SELECT yh_headimgurl FROM tbl_yonghu yh WHERE yh.yh_id=fj.fj_sender_id) AS sender_headimgurl,
               (SELECT yh_name FROM tbl_yonghu yh WHERE yh.yh_id=fj.fj_receiver_id) AS receiver_name,
               (SELECT yh_headimgurl FROM tbl_yonghu yh WHERE yh.yh_id=fj.fj_receiver_id) AS receiver_headimgurl
             FROM tbl_fujin fj
-            WHERE fj.fj_sj_id={$sj_id} AND fj_stts={$stts}";
+            WHERE fj.fj_sj_id={$sj_id} AND (fj_stts={$stts})";
 
         $ret = $this->db->query($query)->result_array();
 
         return $ret;
     }
 
-    public function getByYonghu($yh_id, $stts) {
+    public function getByYonghu($yh_id, $stts, $completed = false) {
         $query =
             "SELECT
               fj.*,
               (SELECT sj_name FROM tbl_shangjia sj WHERE sj.sj_id=fj.fj_sj_id) AS sj_name,
+              (SELECT sj_addr FROM tbl_shangjia sj WHERE sj.sj_id=fj.fj_sj_id) AS sj_addr,
               (SELECT yh_name FROM tbl_yonghu yh WHERE yh.yh_id=fj.fj_sender_id) AS sender_name,
               (SELECT yh_headimgurl FROM tbl_yonghu yh WHERE yh.yh_id=fj.fj_sender_id) AS sender_headimgurl,
               (SELECT yh_name FROM tbl_yonghu yh WHERE yh.yh_id=fj.fj_receiver_id) AS receiver_name,
               (SELECT yh_headimgurl FROM tbl_yonghu yh WHERE yh.yh_id=fj.fj_receiver_id) AS receiver_headimgurl
             FROM tbl_fujin fj
-            WHERE (fj.fj_sender_id={$yh_id} OR fj.fj_receiver_id={$yh_id}) AND fj_stts={$stts}";
+            WHERE (fj.fj_sender_id={$yh_id} AND (fj_stts={$stts}))";
+
+        if ($completed) {
+            $query .= 'OR (fj_receiver_id='.$yh_id.' AND (fj_stts!=1 AND fj_stts!=4))';
+        }
 
         $ret = $this->db->query($query)->result_array();
 

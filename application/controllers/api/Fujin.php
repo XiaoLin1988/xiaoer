@@ -28,8 +28,6 @@ class Fujin extends MY_Controller {
             'fj_sender_id' => $_POST['sender_id'],
             'fj_receiver_id' => $_POST['receiver_id'],
             'fj_sj_id' => $_POST['sj_id'],
-            'fj_bx_id' => $_POST['bx_id'],
-            'fj_jl_id' => $_POST['jl_id'],
             'fj_stts' => 1,
             'fj_ctime' => time(),
             'fj_utime' => time(),
@@ -91,8 +89,8 @@ class Fujin extends MY_Controller {
     }
 
     /*
-        1: pending(create), 2: approved(pay), 2: completed by shangjia(completeRequest),
-        3: complete by user(completeByUser), 4: cancelled by user(cancelByUser), 5: withdraw
+        1: pending(create), 2: progress
+        3: complete by user(completeByUser), 4: cancelled by user(cancelByUser), 5: totally finished 7: withdraw
     */
     public function getShangjiade() {
         $result = array();
@@ -100,14 +98,12 @@ class Fujin extends MY_Controller {
         $stts = $_POST['status'];
 
         if ($stts == 2) {
-            $stts = '2 or fj_stts=3';
+            $stts = '2 or fj_stts=3 or fj_stts=7';
         }
 
-        /*
-        if ($stts == 4) {
+        if ($stts == 4 or $stts == 5) {
             $stts = '4 or fj_stts=5';
         }
-        */
 
         $ret = $this->fujin->getByShangjia($_POST['shangjiaId'], $stts);
 
@@ -156,12 +152,15 @@ class Fujin extends MY_Controller {
 
         $stts = $_POST['status'];
 
-        if ($stts == 3) {
+        $data = array();
+
+        if ($stts == 3 or $stts == 5) {
             $stts = '3 or fj_stts=4 or fj_stts=5';
+            $ret = $this->fujin->getByYonghu($_POST['yonghuId'], $stts, true);
+        } else {
+            $ret = $this->fujin->getByYonghu($_POST['yonghuId'], $stts);
         }
 
-        $data = array();
-        $ret = $this->fujin->getByYonghu($_POST['yonghuId'], $stts);
         if (sizeof($ret) > 0) {
             foreach ($ret as $fj) {
                 $fj['mjiu'] = array();
@@ -338,13 +337,13 @@ class Fujin extends MY_Controller {
         echo json_encode($result);
     }
 
-    // Shop owner confirm jiaoyi and send withdrawal request - 5
+    // Shop owner confirm jiaoyi and send withdrawal request - 7
     public function withdrawalRequest() {
 
         $result = array();
         $data = array();
 
-        $data['fj_stts'] = 5; // withdrawal requested status
+        $data['fj_stts'] = 7; // withdrawal requested status
         $fjId = $_POST['fjId'];
 
         // update maijiu status to withdrawal status.

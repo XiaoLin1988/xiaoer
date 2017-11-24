@@ -32,6 +32,10 @@ class Common extends MY_Controller {
                 $file .= 'avatar/';
             } else if ($_POST['type'] == 6) {
                 $file .= 'renzheng/';
+            } else if ($_POST['type'] == 7) { // card image for withdrawal
+                $file .= 'card/';
+            } else if ($_POST['type'] == 8) { // jicundan
+                $file .= 'jicundan/';
             }
 
             $file .= time().'.png';
@@ -91,6 +95,10 @@ class Common extends MY_Controller {
                 $root .= 'avatar/';
             } else if ($_POST['type'] == 6) {
                 $root .= 'renzheng/';
+            } else if ($_POST['type'] == 7) { // card image for withdrawal
+                $file .= 'card/';
+            } else if ($_POST['type'] == 8) { // jicundan
+                $file .= 'jicundan/';
             }
 
             $upFiles = $_FILES['images'];
@@ -158,6 +166,10 @@ class Common extends MY_Controller {
                 $file .= 'jiu/';
             } else if ($_POST['type'] == 3 or $_POST['type'] == 4) {
                 $file .= 'avatar/';
+            } else if ($_POST['type'] == 7) { // card image for withdrawal
+                $file .= 'card/';
+            } else if ($_POST['type'] == 8) { // jicundan
+                $file .= 'jicundan/';
             }
 
             $file .= time().'.png';

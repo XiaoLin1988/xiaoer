@@ -22,6 +22,7 @@ class Jicun extends MY_Controller
         $this->load->model('Shangjia_model', 'shangjia');
 
         $this->load->library('Getui', 'getui');
+
     }
 
     public function create()
