@@ -30,10 +30,12 @@ class Pack_model extends CI_Model{
     }
 
     public function get($shangjiaId) {
-        $res = $this->db->query("select a.*,
-                                  (SELECT b.img_path FROM tbl_image b WHERE a.pk_id = b.img_fid and b.img_type = 5 and b.img_df = 0 ) as avatar
-                                  from tbl_pack a
-                                  WHERE a.pk_df=0 and a.pk_sj_id =".$shangjiaId)->result_array();
+        $res = $this->db->query("select * from tbl_pack WHERE pk_df=0 and  pk_sj_id = ".$shangjiaId)->result_array();
+        return $res;
+    }
+
+    public function getImages($id, $type) {
+        $res = $this->db->query("select img_path from tbl_image WHERE img_df=0 and img_type = ".$type." and img_fid = ".$id." order by img_ctime")->result_array();
         return $res;
     }
 

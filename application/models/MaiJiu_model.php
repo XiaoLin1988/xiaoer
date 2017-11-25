@@ -92,7 +92,7 @@ class MaiJiu_model extends CI_Model
               (SELECT yh_name FROM tbl_yonghu yh WHERE yh.yh_id=mj.mj_buyer_id) as yh_name,
               (SELECT yh_headimgurl FROM tbl_yonghu yh WHERE yh.yh_id=mj.mj_buyer_id) as yh_headimgurl
           FROM tbl_maijiu mj RIGHT JOIN tbl_shangjia sj ON sj.sj_id=mj.mj_sj_id 
-          WHERE  mj.mj_df=0 AND mj.mj_sj_id={$shangjiaId} AND mj.mj_stts={$status} AND mj.mj_type=1")->result_array();
+          WHERE  mj.mj_df=0 AND sj.sj_type = 0 AND mj.mj_sj_id={$shangjiaId} AND mj.mj_type=1 AND (mj.mj_stts={$status})")->result_array();
 
         return $res;
     }

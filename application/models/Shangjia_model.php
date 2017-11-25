@@ -46,7 +46,9 @@ class Shangjia_model extends CI_Model{
     public function detail($id) {
         $query = "
             SELECT
-                a.*, (SELECT b.img_path FROM tbl_image b WHERE a.sj_id=b.img_fid AND b.img_type = 1 and b.img_df = 0) as avatar
+                a.*, (SELECT b.img_path FROM tbl_image b WHERE a.sj_id=b.img_fid AND b.img_type = 1 and b.img_df = 0) as avatar,
+                (SELECT b.img_path FROM tbl_image b WHERE a.sj_id=b.img_fid AND b.img_type = 7 and b.img_df = 0) as card_avatar
+
             FROM
                 tbl_shangjia a
             WHERE

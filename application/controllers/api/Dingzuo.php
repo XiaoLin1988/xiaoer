@@ -124,19 +124,19 @@ class Dingzuo extends MY_Controller {
         //$deviceToken = "dbccac9f47ed0a912a89a085c27122d738c53ff164485f04ab57a78d437139da";
 
         // make push sentence. e.g user<xx> request to yuding Baoxiang/Kazuo <xxx> of your Restaurant. Accept/Deny ?
-        $sentence = "user<{$buyerData[0]["yh_name"]}> request to yuding ";
+        $sentence = "用户<{$buyerData[0]["yh_name"]}> 预定了您店的";
 
         // check baoxiang or kazuo 1: 包厢   2: 卡座
         if ( $baoxiangData[0]["bx_type"] == 1 ) { // baoxiang
-            $sentence = $sentence . "Baoxiang<{$baoxiangData[0]["bx_name"]}> of your Restaurant. ";
+            $sentence = $sentence . "包厢<{$baoxiangData[0]["bx_name"]}>。";
         }
         else if ( $baoxiangData[0]["bx_type"] == 2 ) {
-            $sentence = $sentence . "Kazuo<{$baoxiangData[0]["bx_name"]}> of your Restaurant. ";
+            $sentence = $sentence . "卡座<{$baoxiangData[0]["bx_name"]}>。";
         }
 
         // check jingli
         if ($jingliId != 0) { // if user select jingli
-            $sentence = $sentence . "he want jingli <{$jingliData[0]["jl_name"]}>.";
+            $sentence = $sentence . "选择的经理是 <{$jingliData[0]["jl_name"]}>。";
         }
 
         $sentence = $sentence . "pcount; {$pcount} , atime: {$atime}";
@@ -184,7 +184,7 @@ class Dingzuo extends MY_Controller {
 
             // get shop owner device token
             $deviceToken = $shopOwnerData[0]["yh_deviceId"];
-            $sentence = "user<{$buyerData[0]["yh_name"]}> canceled dingzuo request";
+            $sentence = "用户<{$buyerData[0]["yh_name"]}> 取消了订座。";
 
             $this->getui->pushMessageToSingleIOS($deviceToken, $sentence);
 
@@ -228,7 +228,7 @@ class Dingzuo extends MY_Controller {
 
             // get shop owner device token
             $deviceToken = $buyerData[0]["yh_deviceId"];
-            $sentence = "Shop <{$shopData[0]["sj_name"]}> owner accepted your dingzuo request";
+            $sentence = "商家<{$shopData[0]["sj_name"]}> 接收了您的订座";
 
             $this->getui->pushMessageToSingleIOS($deviceToken, $sentence);
 
@@ -270,7 +270,7 @@ class Dingzuo extends MY_Controller {
 
             // get shop owner device token
             $deviceToken = $buyerData[0]["yh_deviceId"];
-            $sentence = "Shop <{$shopData[0]["sj_name"]}> owner denyed your dingzuo request because there are some issues.";
+            $sentence = "抱歉，商家<{$shopData[0]["sj_name"]}>因各种原因无法接收您的请求。";
 
             $this->getui->pushMessageToSingleIOS($deviceToken, $sentence);
             
@@ -307,7 +307,7 @@ class Dingzuo extends MY_Controller {
 
         // get shop owner device token
         $deviceToken = $buyerData[0]["yh_deviceId"];
-        $sentence = "Shop <{$shopData[0]["sj_name"]}> owner wants you to complete current jiaoyi";
+        $sentence = "您好！商家 <{$shopData[0]["sj_name"]}> 请求您在应用确认交易完成。";
 
         $result['status'] = true;
         $result['data'] = 'success';
@@ -347,7 +347,9 @@ class Dingzuo extends MY_Controller {
 
             // get shop owner device token
             $deviceToken = $shopOwnerData[0]["yh_deviceId"];
-            $sentence = "user<{$buyerData[0]["yh_name"]}> completed dingzuo jiaoyi - baoxiangName is {$baoxiangData[0]["bx_name"]}";
+           // $sentence = "user<{$buyerData[0]["yh_name"]}> completed dingzuo jiaoyi - baoxiangName is {$baoxiangData[0]["bx_name"]}";
+            $sentence = "用户<{$buyerData[0]["yh_name"]}> 完成了订座交易 - 包厢是{$baoxiangData[0]["bx_name"]}。";
+
 
             $this->getui->pushMessageToSingleIOS($deviceToken, $sentence);
             

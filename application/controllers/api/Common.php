@@ -6,6 +6,9 @@
  * Date: 10/21/2017
  * Time: 10:41 PM
  */
+
+require_once('application/libraries/SmsDemo.php');
+
 class Common extends MY_Controller {
 
     public function __construct() {
@@ -208,4 +211,20 @@ class Common extends MY_Controller {
 
         echo json_encode($result);
     }
+
+    public static function sendSMS($dingdanhao) {
+        $response = SmsDemo::sendSms(
+            "小二上酒", // 短信签名
+            "SMS_113455760", // 短信模板编号
+            "13706953121", // 短信接收者
+            Array(  // 短信模板中字段的值
+                "name"=>"[吴小二先生]",
+                "ddnumber"=> $dingdanhao
+            ),
+            "123"   // 流水号,选填
+        );
+        print_r($response);
+    }
+
+
 }

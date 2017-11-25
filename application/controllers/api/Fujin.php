@@ -6,13 +6,14 @@
  * Date: 10/23/2017
  * Time: 1:11 AM
  */
+require_once('application/controllers/api/Common.php');
+
 class Fujin extends MY_Controller {
 
     public function __construct() {
         parent::__construct();
 
-        $this->load->model('Fujin_model', 'fujin');
-        $this->load->model('Dingzuo_model', 'dingzuo');
+        $this->load->model('Fujin_model', 'fujin'); 
         $this->load->model('Mjiu_model', 'mjiu');
         $this->load->model('Yonghu_model', 'yonghu');
         $this->load->model('Jiu_model', 'jiu');
@@ -155,7 +156,7 @@ class Fujin extends MY_Controller {
         $data = array();
 
         if ($stts == 3 or $stts == 5) {
-            $stts = '3 or fj_stts=4 or fj_stts=5';
+            $stts = '3 or fj_stts=4 or fj_stts=5 or fj_stts=7';
             $ret = $this->fujin->getByYonghu($_POST['yonghuId'], $stts, true);
         } else {
             $ret = $this->fujin->getByYonghu($_POST['yonghuId'], $stts);
@@ -229,8 +230,8 @@ class Fujin extends MY_Controller {
             $deviceToken = $receiverData[0]["yh_deviceId"];
 
             // make push sentence. e.g <xx> sent you jiu
-            $sentence = "<{$senderData[0]['yh_name']}> sent you jiu";
-
+           //    $sentence = "<{$senderData[0]['yh_name']}> sent you jiu";
+                 $sentence = "您好！用户<{$senderData[0]['yh_name']}> 给您送酒了！";
             $this->getui->pushActionToSingleIOS($deviceToken, $sentence, "openShopDingdanManagementPage", "123");
             $this->getui->pushActionToSingleAndroid($deviceToken, $sentence, "openShopDingdanManagementPage", "123");
 
@@ -285,7 +286,7 @@ class Fujin extends MY_Controller {
 
         // get shop owner send complete request to sender
         $deviceToken = $buyerData[0]["yh_deviceId"];
-        $sentence = "Shop <{$shopData[0]["sj_name"]}> owner wants you to complete current jiaoyi";
+        $sentence = "商家 <{$shopData[0]["sj_name"]}> 请求您完成本次交易。";
 
         $result['status'] = true;
         $result['data'] = 'success';
@@ -320,7 +321,8 @@ class Fujin extends MY_Controller {
             $deviceToken = $shopOwnerData[0]["yh_deviceId"];
 
             // make push sentence. e.g  user <xx> confirmed jiaoyi finished, you can request withdrawal
-            $sentence = "user<{$buyerData[0]["yh_name"]}> confirmed jiaoyi finished, you can request withdrawal";
+           // $sentence = "user<{$buyerData[0]["yh_name"]}> confirmed jiaoyi finished, you can request withdrawal";
+            $sentence = "用户<{$buyerData[0]["yh_name"]}> 确认了交易完成。您可以请求提现了。";
 
             $this->getui->pushActionToSingleIOS($deviceToken, $sentence, "openShopDingdanManagementPage", "123");
             $this->getui->pushActionToSingleAndroid($deviceToken, $sentence, "openShopDingdanManagementPage", "123");
@@ -348,6 +350,8 @@ class Fujin extends MY_Controller {
 
         // update maijiu status to withdrawal status.
         $ret = $this->fujin->update($data, $fjId);
+
+        Common::sendSMS("fj_".$fjId);
 
         if ($ret == true ) {
             // here send sms to xiaoer

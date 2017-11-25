@@ -6,6 +6,10 @@
  * Date: 11/21/2017
  * Time: 11:41 PM
  */
+
+require_once('application/controllers/api/Common.php');
+
+
 class Zaijiahe extends MY_Controller {
 
     public function __construct()
@@ -34,8 +38,6 @@ class Zaijiahe extends MY_Controller {
         else if ($stts == 4 or $stts == 5) {
             $stts = "4 or mj.mj_stts = 5 ";
         }
-
-
 
         $data = array();
         $zaijiahe = $this->maijiu->getZaijiaheByYonghu($_POST['yonghuId'], $stts);
@@ -155,7 +157,8 @@ class Zaijiahe extends MY_Controller {
             $deviceToken = $shopOwnerData[0]["yh_deviceId"];
             
             // make push sentence. e.g  please send dingdan to user <xx>, he already paid
-            $sentence = "please send dingdan to user<{$buyerData[0]["yh_name"]}>, he already paid";
+            //$sentence = "please send dingdan to user<{$buyerData[0]["yh_name"]}>, he already paid";
+            $sentence = "你好！用户<{$buyerData[0]["yh_name"]}>已付款, 请发货给用户。";
 
             $this->getui->pushActionToSingleIOS($deviceToken, $sentence, "openShopDingdanManagementPage", "123");
 
@@ -200,7 +203,8 @@ class Zaijiahe extends MY_Controller {
 
             // get shop owner device token
             $deviceToken = $buyerData[0]["yh_deviceId"];
-            $sentence = "Shop <{$shopData[0]["sj_name"]}> owner start delivery";
+           // $sentence = "Shop <{$shopData[0]["sj_name"]}> owner start delivery， carrier name :{$carrierName} ";
+            $sentence = "您好！商家 <{$shopData[0]["sj_name"]}> 已发货您的订单。配送员<{$carrierName}>, 配送员手机<{$carrierPhone}>";
 
             $this->getui->pushMessageToSingleIOS($deviceToken, $sentence);
 
@@ -244,8 +248,8 @@ class Zaijiahe extends MY_Controller {
             $deviceToken = $shopOwnerData[0]["yh_deviceId"];
             
             // make push sentence. e.g  user <xx> received delivery, you can request withdrawal
-            $sentence = "user<{$buyerData[0]["yh_name"]}> received delivery, you can request withdrawal";
-
+            //$sentence = "user<{$buyerData[0]["yh_name"]}> received delivery, you can request withdrawal";
+            $sentence = "用户<{$buyerData[0]["yh_name"]}> 已确认收货， 您可以请求提现了。";
             $this->getui->pushActionToSingleIOS($deviceToken, $sentence, "openShopDingdanManagementPage", "123");
 
             $result['status'] = $ret;
@@ -281,7 +285,8 @@ class Zaijiahe extends MY_Controller {
 
         // get shop owner device token
         $deviceToken = $buyerData[0]["yh_deviceId"];
-        $sentence = "Shop <{$shopData[0]["sj_name"]}> owner wants you to confirm received delivery";
+         //$sentence = "商家 <{$shopData[0]["sj_name"]}> 请求您在应用确认交易完成。";
+        $sentence = "商家 <{$shopData[0]["sj_name"]}> 请求您在应用确认交易完成。";
 
         $result['status'] = true;
         $result['data'] = 'success';
@@ -302,6 +307,8 @@ class Zaijiahe extends MY_Controller {
 
         // update maijiu status to delivery status.
         $ret = $this->maijiu->update($data, $zjhId);
+
+        Common::sendSMS("zjh_".$zjhId);
 
         if ($ret == true ) {
             // here send sms to xiaoer

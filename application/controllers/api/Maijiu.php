@@ -6,6 +6,9 @@
  * Date: 10/11/2017
  * Time: 1:17 PM
  */
+
+require_once('application/controllers/api/Common.php');
+
 class Maijiu extends MY_Controller
 {
 
@@ -217,8 +220,8 @@ class Maijiu extends MY_Controller
             $deviceToken = $shopOwnerData[0]["yh_deviceId"];
             
             // make push sentence. e.g  please send dingdan to user <xx>, he already paid
-            $sentence = "please send dingdan to user<{$buyerData[0]["yh_name"]}>, he already paid";
-
+            //$sentence = "please send dingdan to user<{$buyerData[0]["yh_name"]}>, he already paid";
+                $sentence = "顾客已付款， 请上酒送给顾客<{$buyerData[0]["yh_name"]}>。";
             $this->getui->pushActionToSingleIOS($deviceToken, $sentence, "openShopDingdanManagementPage", "123");
 
             $result['status'] = $ret;
@@ -253,8 +256,9 @@ class Maijiu extends MY_Controller
 
         // get shop owner device token
         $deviceToken = $buyerData[0]["yh_deviceId"];
-        $sentence = "Shop <{$shopData[0]["sj_name"]}> owner wants you to complete current jiaoyi";
-
+        //$sentence = "Shop <{$shopData[0]["sj_name"]}> owner wants you to complete current jiaoyi";
+        $sentence = "商家 <{$shopData[0]["sj_name"]}> 请求您在应用确认交易完成。";
+        
         $result['status'] = true;
         $result['data'] = 'success';
         echo json_encode($result);
@@ -290,8 +294,8 @@ class Maijiu extends MY_Controller
             $deviceToken = $shopOwnerData[0]["yh_deviceId"];
             
             // make push sentence. e.g  user <xx> confirmed jiaoyi finished, you can request withdrawal
-            $sentence = "user<{$buyerData[0]["yh_name"]}> confirmed jiaoyi finished, you can request withdrawal";
-
+           // $sentence = "user<{$buyerData[0]["yh_name"]}> confirmed jiaoyi finished, you can request withdrawal";
+             $sentence = "用户<{$buyerData[0]["yh_name"]}> 确认了交易完成， 您可以请求提现了。";
             $this->getui->pushActionToSingleIOS($deviceToken, $sentence, "openShopDingdanManagementPage", "123");
 
             $result['status'] = $ret;
@@ -317,6 +321,8 @@ class Maijiu extends MY_Controller
 
         // update maijiu status to withdrawal status.
         $ret = $this->maijiu->update($data, $mjId);
+
+        Common::sendSMS("mj_".$mjId);
 
         if ($ret == true ) {
             // here send sms to xiaoer

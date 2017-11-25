@@ -82,7 +82,7 @@
     }
 
     function cardFormatter(value, row, index) {
-        return '<a href="' + value + '">提现卡</a>';
+        return '<a href="' + value + '">查看</a>';
     }
 
     function makeTixian (trade_type, trade_no) {
@@ -127,12 +127,12 @@
                     field: 'trade_no',
                     formatter: 'tradeNoFormatter',
                     title: '交易代码'
-                },
+                },/*
                 {
                     field: 'trade_items',
                     formatter: 'tradeItemsFormatter',
                     title: '订单内容'
-                },
+                },*/
                 {
                     field: 'yonghu_name',
                     title: '买单用户'
@@ -150,7 +150,7 @@
                 {
                     field: 'card_avatar',
                     formatter: 'cardFormatter',
-                    title: '提现卡'
+                    title: '银行卡照片'
                 },
                 {
                     field: 'operation',

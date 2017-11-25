@@ -13,7 +13,7 @@
                     <strong>请输入账号密码</strong>
                 </div>
                 <div class="panel-body">
-                    <form method="post" action="login/doLogin" role="form">
+                    <form method="post" action="<?php echo base_url('index.php/admin/login/doLogin');?>" role="form">
                         <br />
                         <div class="form-group input-group">
                             <span class="input-group-addon"><i class="fa fa-tag"  ></i></span>

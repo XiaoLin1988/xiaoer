@@ -114,5 +114,16 @@ class Yonghu extends MY_Controller
 
         echo json_encode($result);
     }
+
+    public function getTopPaymenter() {
+        $result = array();
+
+        $ret = $this->yonghu->getTopPaymenter();
+
+        $result['status'] = true;
+        $result['data'] = $ret;
+
+        echo json_encode($result);
+    }
     
 }

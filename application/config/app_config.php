@@ -16,13 +16,13 @@ $config['app_config'] = array(
 
     // Default scripts to embed at page head or end
     'scripts' => array(
-        'head'	=> array(
+        'head'  => array(
             'assets/js/jquery.min.js',
             'assets/js/jquery-ui.js',
             'assets/js/bootstrap.min.js',
             'assets/js/swal/sweet-alert.js'
         ),
-        'foot'	=> array(
+        'foot'  => array(
             'assets/js/jquery.metisMenu.js',
             'assets/js/morris/raphael-2.1.0.min.js',
             'assets/js/morris/morris.js',

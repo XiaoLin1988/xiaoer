@@ -7,6 +7,7 @@
  * Time: 10:05 PM
  * 
  */
+
 class Jicun extends MY_Controller
 {
 
@@ -62,7 +63,8 @@ class Jicun extends MY_Controller
 
             // get shop owner device token
             $deviceToken = $shopOwnerData[0]["yh_deviceId"];
-            $sentence = "user<{$buyerData[0]["yh_name"]}> created jicun.";
+            //$sentence = "user<{$buyerData[0]["yh_name"]}> created jicun.";
+            $sentence = "用户<{$buyerData[0]["yh_name"]}> 创建了寄存单。请受理。";
 
             $this->getui->pushActionToSingleIOS($deviceToken, $sentence, "openShopJicunManagementPage", "123");
 
@@ -115,7 +117,8 @@ class Jicun extends MY_Controller
 
         // get shop owner device token
         $deviceToken = $shopOwnerData[0]["yh_deviceId"];
-        $sentence = "user<{$buyerData[0]["yh_name"]}> wants jicun, room name : {$bxName}";
+        //$sentence = "user<{$buyerData[0]["yh_name"]}> wants jicun, room name : {$bxName}";
+        $sentence = "用户<{$buyerData[0]["yh_name"]}> 想寄存，包厢是 {$bxName}。";
 
         $this->getui->pushMessageToSingleIOS($deviceToken, $sentence);
 
@@ -180,8 +183,8 @@ class Jicun extends MY_Controller
 
             // get shop owner device token
             $deviceToken = $buyerData[0]["yh_deviceId"];
-            $sentence = "Shop <{$shopData[0]["sj_name"]}> owner accepted your jicun";
-
+            //$sentence = "商家 <{$shopData[0]["sj_name"]}> owner accepted your jicun";
+            $sentence = "商家 <{$shopData[0]["sj_name"]}> 接收了您的寄存。";
             $this->getui->pushMessageToSingleIOS($deviceToken, $sentence);
 
             $result['status'] = $ret;
@@ -221,8 +224,8 @@ class Jicun extends MY_Controller
 
             // get shop owner device token
             $deviceToken = $shopOwnerData[0]["yh_deviceId"];
-            $sentence = "user<{$buyerData[0]["yh_name"]}> wants quchu jicun";
-
+            //$sentence = "user<{$buyerData[0]["yh_name"]}> wants quchu jicun";
+            $sentence = "用户<{$buyerData[0]["yh_name"]}> 想取寄存。";    
             $this->getui->pushMessageToSingleIOS($deviceToken, $sentence);
 
             $result['status'] = true;
@@ -260,7 +263,8 @@ class Jicun extends MY_Controller
 
             // get shop owner device token
             $deviceToken = $shopOwnerData[0]["yh_deviceId"];
-            $sentence = "user<{$buyerData[0]["yh_name"]}> completed jicun";
+         //   $sentence = "user<{$buyerData[0]["yh_name"]}> completed jicun";
+              $sentence = "用户<{$buyerData[0]["yh_name"]}> 完成了取寄存。";
 
             $this->getui->pushMessageToSingleIOS($deviceToken, $sentence);
 

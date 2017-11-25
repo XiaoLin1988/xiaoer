@@ -40,13 +40,21 @@ class Pack extends MY_Controller {
     }
 
     public function get() {
+        
         $result = array();
+        $tmpRes = array();
+
         $sj_id = $_POST['shangjiaId'];
 
         $res = $this->pack->get($sj_id);
 
+        foreach ($res as $packItem) {
+            $packItem["pk_avatars"] = $this->pack->getImages($packItem["pk_id"], 5); // image type 5  ： pack type
+            array_push($tmpRes, $packItem);
+        }
+
         $result['status'] = true;
-        $result['data'] = $res;
+        $result['data'] = $tmpRes;
 
         echo json_encode($result);
     }
