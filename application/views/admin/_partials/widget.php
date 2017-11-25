@@ -19,7 +19,7 @@
                     <img src="<?php echo base_url('assets/img/find_user.png'); ?>" class="user-image img-responsive"/>
                 </li>
                 <li>
-                    <a class="<?php if($menu_selected == 'dashboard') echo 'active-menu';?>"  href="<?php echo site_url('admin/dashboard'); ?>"><i class="fa fa-dashboard fa-3x"></i> Dashboard</a>
+                    <a class="<?php if($menu_selected == 'dashboard') echo 'active-menu';?>"  href="<?php echo site_url('admin/dashboard'); ?>"><i class="fa fa-dashboard fa-3x"></i> 首页</a>
                 </li>
 
                 <li>
@@ -31,25 +31,25 @@
                 </li>
 
                 <li>
-                    <a   href="chart.html"><i class="fa fa-bar-chart-o fa-3x"></i> Morris Charts</a>
+                    <a   href="<?php echo site_url('admin/blank'); ?>"><i class="fa fa-bar-chart-o fa-3x"></i> 侧边菜单1 </a>
                 </li>
 
                 <li>
-                    <a  href="table.html"><i class="fa fa-table fa-3x"></i> Table Examples</a>
+                    <a  href=""<?php echo site_url('admin/blank'); ?>"><i class="fa fa-table fa-3x"></i> 侧边菜单1 </a>
                 </li>
 
                 <li>
-                    <a  href="form.html"><i class="fa fa-edit fa-3x"></i> Forms </a>
+                    <a  href=""<?php echo site_url('admin/blank'); ?>"><i class="fa fa-edit fa-3x"></i> 侧边菜单1 </a>
                 </li>
-
+<!--
                 <li>
-                    <a   href="login.html"><i class="fa fa-bolt fa-3x"></i> Login</a>
+                    <a   href="login.html"><i class="fa fa-bolt fa-3x"></i> Login </a>
                 </li>
 
                 <li>
                     <a   href="registeration.html"><i class="fa fa-laptop fa-3x"></i> Registeration</a>
                 </li>
-
+-->
                 <li>
                     <a href="#"><i class="fa fa-sitemap fa-3x"></i> Multi-Level Dropdown<span class="fa arrow"></span></a>
                     <ul class="nav nav-second-level">
@@ -78,7 +78,7 @@
                     </ul>
                 </li>
                 <li  >
-                    <a  href="blank.html"><i class="fa fa-square-o fa-3x"></i> Blank Page</a>
+                    <a  href="<?php echo site_url('admin/blank'); ?>"><i class="fa fa-square-o fa-3x"></i> 空白页</a>
                 </li>
             </ul>
 

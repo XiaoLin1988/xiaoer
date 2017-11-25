@@ -28,7 +28,7 @@
     }
 
     function imgLinkFormatter(value, row, index) {
-        return '<a href="' + value + '">' + value + '</a>';
+        return '<a href="' + value + '">营业执照</a>';
     }
 
     function setTableButtonListener() {

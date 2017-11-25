@@ -28,25 +28,34 @@ class Tixian_model extends CI_Model
 
         $fujinQuery = "
                 SELECT
-                    fj_id as trade_no, fj_sender_id as sender, fj_sj_id as shangjia, 3 as trade_type
+                    fj_id as trade_no, fj_sender_id as sender, fj_sj_id as shangjia, 3 as trade_type,
+                    (SELECT yh_name FROM tbl_yonghu yh WHERE yh.yh_id=fj.fj_sender_id) AS yonghu_name,
+                    (SELECT sj_name FROM tbl_shangjia sj WHERE sj.sj_id=fj.fj_sj_id) AS shangjia_name,
+                    (SELECT img_path FROM tbl_image img WHERE img.img_type=7 AND img.img_fid=fj_sender_id AND img.img_df=0) AS card_avatar
                 FROM
-                    tbl_fujin WHERE fj_stts=7
+                    tbl_fujin fj WHERE fj_stts=7
             ";
         $fujin = $this->db->query($fujinQuery)->result_array();
 
         $qingkeQuery = "
                 SELECT
-                    qk_id as trade_no, qk_sender_id as sender, qk_sj_id as shangjia, 2 as trade_type
+                    qk_id as trade_no, qk_sender_id as sender, qk_sj_id as shangjia, 2 as trade_type,
+                    (SELECT yh_name FROM tbl_yonghu yh WHERE yh.yh_id=qk.qk_sender_id) AS yonghu_name,
+                    (SELECT sj_name FROM tbl_shangjia sj WHERE sj.sj_id=qk.qk_sj_id) AS shangjia_name,
+                    (SELECT img_path FROM tbl_image img WHERE img.img_type=7 AND img.img_fid=qk.qk_sj_id AND img.img_df=0) AS card_avatar
                 FROM
-                    tbl_qingke WHERE qk_stts=7
+                    tbl_qingke qk WHERE qk_stts=7
             ";
         $qingke = $this->db->query($qingkeQuery)->result_array();
 
         $jicunQuery = "
                 SELECT
-                    jc_id as trade_no, jc_saver_id as sender, jc_sj_id as shangjia, 4 as trade_type
+                    jc_id as trade_no, jc_saver_id as sender, jc_sj_id as shangjia, 4 as trade_type,
+                    (SELECT yh_name FROM tbl_yonghu yh WHERE yh.yh_id=jc.jc_saver_id) AS yonghu_name,
+                    (SELECT sj_name FROM tbl_shangjia sj WHERE sj.sj_id=jc.jc_sj_id) AS shangjia_name,
+                    (SELECT img_path FROM tbl_image img WHERE img.img_type=7 AND img.img_fid=jc.jc_sj_id AND img.img_df=0) AS card_avatar
                 FROM
-                    tbl_jicun WHERE jc_stts=7
+                    tbl_jicun jc WHERE jc_stts=7
             ";
         $jicun = $this->db->query($jicunQuery)->result_array();
 
@@ -62,9 +71,12 @@ class Tixian_model extends CI_Model
 
         $maijiuQuery = "
                 SELECT
-                    mj_id as trade_no, mj_buyer_id as sender, mj_sj_id as shangjia, 1 as trade_type
+                    mj_id as trade_no, mj_buyer_id as sender, mj_sj_id as shangjia, 1 as trade_type,
+                    (SELECT yh_name FROM tbl_yonghu yh WHERE yh.yh_id=mj.mj_buyer_id) AS yonghu_name,
+                    (SELECT sj_name FROM tbl_shangjia sj WHERE sj.sj_id=mj.mj_sj_id) AS shangjia_name,
+                    (SELECT img_path FROM tbl_image img WHERE img.img_type=7 AND img.img_fid=mj.mj_sj_id AND img.img_df=0) AS card_avatar
                 FROM
-                    tbl_maijiu WHERE mj_stts=7
+                    tbl_maijiu mj WHERE mj_stts=7
             ";
         $maijiu = $this->db->query($maijiuQuery)->result_array();
 

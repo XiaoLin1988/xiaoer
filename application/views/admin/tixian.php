@@ -1,30 +1,52 @@
 <script>
-    function TiXian(shangjia, trade_type, trade_no, trade_items, sender) {
+    function TiXian(shangjia, trade_type, trade_no, trade_items, sender, yonghu_name, shangjia_name, card_avatar) {
         this.shangjia = shangjia;
         this.trade_type = trade_type;
         this.trade_no = trade_no;
         this.trade_items = trade_items;
         this.sender = sender;
+        this.yonghu_name = yonghu_name;
+        this.shangjia_name = shangjia_name;
+        this.card_avatar = card_avatar;
+    }
+
+    function leftPad(number, targetLength) {
+        var output = number + '';
+        while (output.length < targetLength) {
+            output = '0' + output;
+        }
+        return output;
     }
 
     function tradeTypeFormatter(value, row, index) {
-        // 1: zaijiahe, 2: fujin, 3: maijiu
+        // 1: maijiu, 2: qingke, 3: fujin, 4: jicun
         if (value == 1) {
-            return '在家';
-        } else if (value == 2) {
-            return '附近';
-        } else if (value == 3) {
             return '买酒';
+        } else if (value == 2) {
+            return '请客';
+        } else if (value == 3) {
+            return '附近';
+        } else if (value == 4) {
+            return '寄存';
         }
     }
 
     function tradeNoFormatter(value, row, index) {
-        return 'XXX-' + value;
+        var code = "";
+        if (row.trade_type == 1)
+            code = "MJ";
+        else if (row.trade_type == 2)
+            code = "QK";
+        else if (row.trade_type == 3)
+            code = "FJ";
+        else if (row.trade_type == 4)
+            code = "JC";
+        return code + "-" + leftPad(value, 8);
     }
 
     function tradeItemsFormatter(value, row, index) {
         var result = '<div class="btn-group">';
-        result += '<button class="btn btn-default">Trading Items</button>';
+        result += '<button class="btn btn-default">详细</button>';
         result += '<button data-toggle="dropdown" class="btn btn-default dropdown-toggle"><span class="caret"></span></button>';
         result += '<ul class="dropdown-menu">';
 
@@ -42,8 +64,8 @@
         for (var i = 0; i < row.trade_items.length; i++) {
             amount += row.trade_items[i].price * row.trade_items[i].count;
         }
-
-        return amount / 100 * 95;
+        var amount = amount / 100 * 95;
+        return amount.toFixed(2);
     }
 
     function totalAmountFormatter(value, row, index) {
@@ -59,6 +81,10 @@
         return '<input type="button" class="btn btn-success btn-sm btn-problem" value="交易完成">';
     }
 
+    function cardFormatter(value, row, index) {
+        return '<a href="' + value + '">提现卡</a>';
+    }
+
     function makeTixian (trade_type, trade_no) {
         // send SMS
 
@@ -72,7 +98,7 @@
             },
             success : function(response){
                 if (response.status == true) {
-                    alert('successfully accepted');
+                    swal("操作成功!", "", "success");
                     $('#table').bootstrapTable('remove', {
                         field: 'trade_no',
                         values: [trade_no]
@@ -89,7 +115,7 @@
         $('#table').bootstrapTable({
             columns: [
                 {
-                    field: 'shangjia',
+                    field: 'shangjia_name',
                     title: '商家'
                 },
                 {
@@ -108,7 +134,7 @@
                     title: '订单内容'
                 },
                 {
-                    field: 'sender',
+                    field: 'yonghu_name',
                     title: '买单用户'
                 },
                 {
@@ -120,6 +146,11 @@
                     field: 'fund',
                     formatter: 'payAmountFormatter',
                     title: '提现金额'
+                },
+                {
+                    field: 'card_avatar',
+                    formatter: 'cardFormatter',
+                    title: '提现卡'
                 },
                 {
                     field: 'operation',
@@ -136,7 +167,18 @@
             var data = $('#table').bootstrapTable('getData')[index];
             var sj_id = data.sj_id;
 
-            makeTixian(data.trade_type, data.trade_no);
+            swal({
+                title: "确定交易完成?",
+                text: "在您确认提现完成的前提下进行确认!",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                cancelButtonText: "取消",
+                confirmButtonText: "是的， 我已经完成提现",
+                closeOnConfirm: false
+            }, function(){
+                makeTixian(data.trade_type, data.trade_no);
+            });
         });
     }
 </script>
@@ -167,7 +209,10 @@
         <?php echo $tixian['trade_type']; ?>,
         <?php echo $tixian['trade_no']; ?>,
         JSON.parse('<?php echo json_encode($tixian['trade_items']); ?>'),
-        <?php echo $tixian['sender']; ?>
+        <?php echo $tixian['sender']; ?>,
+        "<?php echo $tixian['yonghu_name']; ?>",
+        "<?php echo $tixian['shangjia_name']; ?>",
+        "<?php echo base_url($tixian['card_avatar']); ?>"
     );
     tblData.push(d);
     <?php } ?>
